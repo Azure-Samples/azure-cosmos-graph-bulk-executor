@@ -1,57 +1,30 @@
-# Project Name
-
-(short, 1-3 sentenced, description of the project)
-
-## Features
-
-This project framework provides the following features:
-
-* Feature 1
-* Feature 2
-* ...
-
-## Getting Started
-
-### Prerequisites
-
-(ideally very short, if any)
-
-- OS
-- Library version
-- ...
-
-### Installation
-
-(ideally very short)
-
-- npm install [package name]
-- mvn install
-- ...
-
-### Quickstart
-(Add steps to get up and running quickly)
-
-1. git clone [repository clone url]
-2. cd [respository name]
-3. ...
+---
+page_type: sample
+name: Azure Cosmos samples to leverage Bulk capabilities for Graph API accounts
+urlFragment: azure-cosmos-graph-bulk-executor
+description: Learn how to leverage Bulk capabilities for Graph API accounts in Azure Cosmos.
+languages:
+- csharp
+- java
+products:
+- azure-cosmos-db
+---
 
 
-## Demo
 
-A demo app is included to show how to use the project.
+# Azure Cosmos samples for Bulk ingestion and capabilities on Graph API accounts
 
-To run the demo, follow these steps:
+This repository contains samples for Java and .NET applications that need to perform large optimized data ingestions for Graph elements.
 
-(Add steps to start up the demo)
+The samples leverage the [Bulk capabilities](https://devblogs.microsoft.com/cosmosdb/introducing-bulk-support-in-the-net-sdk/) on the Azure Cosmos Java and .NET SDKs to optimize network usage and ensure the provisioned throughput is utilized.
 
-1.
-2.
-3.
+## .NET
 
-## Resources
+## Java
 
-(Any additional resources or related projects)
+## Further resources
 
-- Link to supporting information
-- Link to similar sample
-- ...
+* [Introduction to Bulk mode](https://devblogs.microsoft.com/cosmosdb/introducing-bulk-support-in-the-net-sdk/)
+* [Azure Cosmos Java SDK](https://docs.microsoft.com/azure/cosmos-db/sql/sql-api-sdk-java-v4)
+* [Azure Cosmos .NET SDK](https://docs.microsoft.com/azure/cosmos-db/sql-api-sdk-dotnet-standard)
+* [Azure Cosmos Gremlin API introduction](https://docs.microsoft.com/azure/cosmos-db/graph/graph-introduction)
