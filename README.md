@@ -20,7 +20,11 @@ The samples leverage the [Bulk capabilities](https://devblogs.microsoft.com/cosm
 
 ## .NET
 
+See the [dotnet](dotnet/) folder regarding guidance for .NET applications.
+
 ## Java
+
+See the [java](java/) folder regarding guidance for Java applications.
 
 ## Further resources
 
