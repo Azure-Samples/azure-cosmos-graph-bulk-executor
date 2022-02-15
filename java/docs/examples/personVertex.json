@@ -1,0 +1,23 @@
+{
+    "id": "d79db024-be72-4abb-a628-39d75aef65d1",
+    "label": "PERSON",
+    "country": "GIN",
+    "firstName": [
+        {
+            "id": "582bf396-8b7c-4632-84df-9eda29bd70d9",
+            "_value": "John"
+        }
+    ],
+    "lastName": [
+        {
+            "id": "92fe831d-6eb7-41e4-b945-b9f8c5576a1c",
+            "_value": "Davis"
+        }
+    ],
+    "ElectronicMail": [
+        {
+            "id": "88062553-49ac-4810-9690-4c2333561332",
+            "_value": "John.Davis@me.com"
+        }
+    ]
+}

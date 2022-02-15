@@ -1,0 +1,158 @@
+[
+    {
+        "startTime": 592975183267700,
+        "endTime": 592992537390600,
+        "durationInNanoSeconds": 17354122900,
+        "durationInMinutes": 0.28923538,
+        "vertexCount": 1000,
+        "edgeCount": 5603,
+        "exception": null,
+        "states": [
+            {
+                "stateName": "Build sample vertices",
+                "startTime": 592975194282300,
+                "endTime": 592975416464000,
+                "durationInNanoSeconds": 222181700,
+                "durationInMinutes": 0.0037030282
+            },
+            {
+                "stateName": "Build sample edges",
+                "startTime": 592975416613600,
+                "endTime": 592975509369200,
+                "durationInNanoSeconds": 92755600,
+                "durationInMinutes": 0.0015459266
+            },
+            {
+                "stateName": "Configure Database",
+                "startTime": 592975509544700,
+                "endTime": 592978523171400,
+                "durationInNanoSeconds": 3013626700,
+                "durationInMinutes": 0.05022711
+            },
+            {
+                "stateName": "Write Documents",
+                "startTime": 592978523258500,
+                "endTime": 592992537389900,
+                "durationInNanoSeconds": 14014131400,
+                "durationInMinutes": 0.23356885
+            }
+        ]
+    },
+    {
+        "startTime": 593079743116600,
+        "endTime": 593232611325700,
+        "durationInNanoSeconds": 152868209100,
+        "durationInMinutes": 2.5478034,
+        "vertexCount": 10000,
+        "edgeCount": 54992,
+        "exception": null,
+        "states": [
+            {
+                "stateName": "Build sample vertices",
+                "startTime": 593079752264200,
+                "endTime": 593080084821600,
+                "durationInNanoSeconds": 332557400,
+                "durationInMinutes": 0.0055426233
+            },
+            {
+                "stateName": "Build sample edges",
+                "startTime": 593080085020600,
+                "endTime": 593080528485800,
+                "durationInNanoSeconds": 443465200,
+                "durationInMinutes": 0.007391087
+            },
+            {
+                "stateName": "Configure Database",
+                "startTime": 593080528698100,
+                "endTime": 593084450345100,
+                "durationInNanoSeconds": 3921647000,
+                "durationInMinutes": 0.065360785
+            },
+            {
+                "stateName": "Write Documents",
+                "startTime": 593084450447800,
+                "endTime": 593232611323800,
+                "durationInNanoSeconds": 148160876000,
+                "durationInMinutes": 2.4693477
+            }
+        ]
+    },
+    {
+        "startTime": 594592263717100,
+        "endTime": 594743299043800,
+        "durationInNanoSeconds": 151035326700,
+        "durationInMinutes": 2.5172553,
+        "vertexCount": 10000,
+        "edgeCount": 55598,
+        "exception": null,
+        "states": [
+            {
+                "stateName": "Build sample vertices",
+                "startTime": 594592275940300,
+                "endTime": 594592632948300,
+                "durationInNanoSeconds": 357008000,
+                "durationInMinutes": 0.0059501333
+            },
+            {
+                "stateName": "Build sample edges",
+                "startTime": 594592633153100,
+                "endTime": 594593127718300,
+                "durationInNanoSeconds": 494565200,
+                "durationInMinutes": 0.008242752
+            },
+            {
+                "stateName": "Configure Database",
+                "startTime": 594593127890900,
+                "endTime": 594595983047800,
+                "durationInNanoSeconds": 2855156900,
+                "durationInMinutes": 0.04758595
+            },
+            {
+                "stateName": "Write Documents",
+                "startTime": 594595983145700,
+                "endTime": 594743299043300,
+                "durationInNanoSeconds": 147315897600,
+                "durationInMinutes": 2.4552648
+            }
+        ]
+    },
+    {
+        "startTime": 594846295416200,
+        "endTime": 594997997327300,
+        "durationInNanoSeconds": 151701911100,
+        "durationInMinutes": 2.5283651,
+        "vertexCount": 10000,
+        "edgeCount": 54772,
+        "exception": null,
+        "states": [
+            {
+                "stateName": "Build sample vertices",
+                "startTime": 594846305134900,
+                "endTime": 594846637753200,
+                "durationInNanoSeconds": 332618300,
+                "durationInMinutes": 0.005543638
+            },
+            {
+                "stateName": "Build sample edges",
+                "startTime": 594846637903900,
+                "endTime": 594847086207300,
+                "durationInNanoSeconds": 448303400,
+                "durationInMinutes": 0.007471723
+            },
+            {
+                "stateName": "Configure Database",
+                "startTime": 594847086371300,
+                "endTime": 594850580621000,
+                "durationInNanoSeconds": 3494249700,
+                "durationInMinutes": 0.058237493
+            },
+            {
+                "stateName": "Write Documents",
+                "startTime": 594850580698800,
+                "endTime": 594997997326900,
+                "durationInNanoSeconds": 147416628100,
+                "durationInMinutes": 2.4569438
+            }
+        ]
+    }
+]
