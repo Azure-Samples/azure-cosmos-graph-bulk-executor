@@ -24,4 +24,5 @@ public class PersonVertex {
     public String country;
     @GremlinIgnore
     public Boolean isSpecial;
+
 }

@@ -54,4 +54,34 @@ public class DatabaseSettings {
 
     public static Boolean ALLOW_UPSERT =
             Boolean.parseBoolean(Properties().getProperty("sample.sql.allow.upserts"));
+
+    public static String CONTACT_POINT =
+        System.getProperty("CONTACT_POINT",
+            StringUtils.defaultString(StringUtils.trimToNull(
+                System.getenv().get("CONTACT_POINT")),
+                Properties().getProperty("sample.gremlin.contactPoint")));
+
+    public static int PORT =
+        Integer.parseInt(System.getProperty("PORT",
+            StringUtils.defaultString(StringUtils.trimToNull(
+                System.getenv().get("PORT")),
+                Properties().getProperty("sample.gremlin.port"))));
+
+    public static boolean SSL_ENABLED =
+        Boolean.parseBoolean(System.getProperty("SSL_ENABLED",
+            StringUtils.defaultString(StringUtils.trimToNull(
+                System.getenv().get("SSL_ENABLED")),
+                Properties().getProperty("sample.gremlin.sslEnabled"))));
+
+    public static int MAX_CONNECTION_POOL_SIZE =
+        Integer.parseInt(System.getProperty("MAX_CONNECTION_POOL_SIZE",
+            StringUtils.defaultString(StringUtils.trimToNull(
+                System.getenv().get("MAX_CONNECTION_POOL_SIZE")),
+                Properties().getProperty("sample.gremlin.maxConnectionPoolSize"))));
+
+    public static int MAX_WAIT_FOR_CONNECTION =
+        Integer.parseInt(System.getProperty("MAX_WAIT_FOR_CONNECTION",
+            StringUtils.defaultString(StringUtils.trimToNull(
+                System.getenv().get("MAX_WAIT_FOR_CONNECTION")),
+                Properties().getProperty("sample.gremlin.maxWaitForConnection"))));
 }
