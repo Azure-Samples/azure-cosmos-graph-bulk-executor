@@ -1,16 +1,10 @@
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 package com.azure.graph.bulk.impl;
 
-import com.azure.graph.bulk.impl.annotations.GremlinEdge;
-import com.azure.graph.bulk.impl.annotations.GremlinPartitionKey;
-import com.azure.graph.bulk.impl.annotations.GremlinEdgeVertex;
+import com.azure.graph.bulk.impl.annotations.*;
 import com.azure.graph.bulk.impl.annotations.GremlinEdgeVertex.Direction;
-import com.azure.graph.bulk.impl.annotations.GremlinId;
-import com.azure.graph.bulk.impl.annotations.GremlinIgnore;
-import com.azure.graph.bulk.impl.annotations.GremlinLabel;
-import com.azure.graph.bulk.impl.annotations.GremlinLabelGetter;
-import com.azure.graph.bulk.impl.annotations.GremlinProperty;
-import com.azure.graph.bulk.impl.annotations.GremlinPropertyMap;
-import com.azure.graph.bulk.impl.annotations.GremlinVertex;
 import com.azure.graph.bulk.impl.model.GremlinEdgeVertexInfo;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -21,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import static java.lang.reflect.Modifier.isStatic;
+import static java.lang.reflect.Modifier.*;
 
 public final class ObjectToEdge {
     private ObjectToEdge() {

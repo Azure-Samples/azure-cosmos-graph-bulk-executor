@@ -1,15 +1,16 @@
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 package com.azure.graph.bulk.sample.model;
 
 import com.azure.graph.bulk.impl.annotations.GremlinEdge;
-import com.azure.graph.bulk.impl.annotations.GremlinLabel;
 import com.azure.graph.bulk.impl.annotations.GremlinEdgeVertex;
 import com.azure.graph.bulk.impl.annotations.GremlinEdgeVertex.Direction;
+import com.azure.graph.bulk.impl.annotations.GremlinLabel;
 import com.azure.graph.bulk.impl.model.GremlinEdgeVertexInfo;
 import lombok.Builder;
 import lombok.Data;
 
-//TODO: Create a sample edge to demonstrate how a client specific domain class can be decorated to produce a
-// GremlinEdge
 @Data
 @Builder
 @GremlinEdge(partitionKeyFieldName = "country")

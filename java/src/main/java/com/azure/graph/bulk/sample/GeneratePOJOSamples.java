@@ -1,9 +1,12 @@
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 package com.azure.graph.bulk.sample;
 
 import com.azure.graph.bulk.impl.model.GremlinEdge;
-import com.azure.graph.bulk.impl.model.GremlinVertex;
 import com.azure.graph.bulk.impl.model.GremlinEdgeVertexInfo;
 import com.azure.graph.bulk.impl.model.GremlinPartitionKey;
+import com.azure.graph.bulk.impl.model.GremlinVertex;
 import lombok.SneakyThrows;
 
 import java.security.SecureRandom;

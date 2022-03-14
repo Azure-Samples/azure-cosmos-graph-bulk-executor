@@ -1,11 +1,14 @@
-package com.azure.graph.bulk.sample;
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
 
-import java.util.List;
-import java.util.Map;
+package com.azure.graph.bulk.sample;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.apache.tinkerpop.gremlin.driver.Result;
+
+import java.util.List;
+import java.util.Map;
 
 public interface GremlinExecutor {
     /**

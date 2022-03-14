@@ -1,9 +1,12 @@
-package com.azure.graph.bulk.sample;
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
 
-import java.util.Map;
+package com.azure.graph.bulk.sample;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tinkerpop.gremlin.driver.exception.ResponseException;
+
+import java.util.Map;
 
 @Slf4j
 public class GremlinExecutionException extends Exception {

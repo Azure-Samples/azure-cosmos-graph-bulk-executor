@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 package com.azure.graph.bulk.sample;
 
 import org.apache.commons.lang3.StringUtils;
@@ -7,8 +10,6 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class DatabaseSettings {
-
-
     private static Properties Properties() {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         var properties = new Properties();

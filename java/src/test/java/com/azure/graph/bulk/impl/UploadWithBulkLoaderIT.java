@@ -1,6 +1,7 @@
-package com.azure.graph.bulk.impl;
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+package com.azure.graph.bulk.impl;
 
 import com.azure.cosmos.ConsistencyLevel;
 import com.azure.cosmos.CosmosClient;
@@ -13,14 +14,16 @@ import com.azure.graph.bulk.sample.DatabaseSettings;
 import com.azure.graph.bulk.sample.GenerateDomainSamples;
 import com.azure.graph.bulk.sample.GremlinCluster;
 import com.azure.graph.bulk.sample.GremlinExecutor;
+import com.azure.graph.bulk.sample.GremlinResultReader;
 import com.azure.graph.bulk.sample.UploadWithBulkLoader;
 import com.azure.graph.bulk.sample.model.PersonVertex;
 import com.azure.graph.bulk.sample.model.RelationshipEdge;
-import com.azure.graph.bulk.sample.GremlinResultReader;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class UploadWithBulkLoaderIT {
 
