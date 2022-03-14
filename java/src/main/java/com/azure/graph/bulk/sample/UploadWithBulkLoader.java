@@ -70,7 +70,7 @@ public class UploadWithBulkLoader<V, E> {
         ThroughputProperties throughputProperties = ThroughputProperties.createManualThroughput(DatabaseSettings.THROUGHPUT);
         Mono<CosmosContainerResponse> containerIfNotExists = database.createContainerIfNotExists(containerProperties, throughputProperties);
 
-        //  Create container with 400 RU/s
+        //  Create container with the configured RU/s
         CosmosContainerResponse cosmosContainerResponse = containerIfNotExists.block();
         assert cosmosContainerResponse != null;
         container = database.getContainer(cosmosContainerResponse.getProperties().getId());
