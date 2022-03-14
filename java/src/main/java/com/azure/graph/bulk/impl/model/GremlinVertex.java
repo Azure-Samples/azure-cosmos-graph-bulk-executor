@@ -32,8 +32,12 @@ public class GremlinVertex {
         }
     }
 
-    //TODO: expand the validation logic to include id and label
     public void validate() {
+        if (id == null || id.isBlank()) throw new IllegalStateException("Missing ID on GremlinVertex");
+
+        if (label == null || label.isBlank()) throw new IllegalStateException(
+                String.format("Missing label on GremlinVertex: %s", id));
+
         if (partitionKey == null) throw new IllegalStateException(
                 String.format("Missing Partition Key on GremlinVertex %s", this.id));
         partitionKey.validate();

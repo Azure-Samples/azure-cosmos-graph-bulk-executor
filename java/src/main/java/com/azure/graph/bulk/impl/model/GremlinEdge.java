@@ -43,8 +43,18 @@ public class GremlinEdge {
         this.properties.putAll(properties);
     }
 
-    //TODO: expand the validation logic to include id and label
     public void validate() {
+        if (id == null || id.isBlank()) throw new IllegalStateException("Missing ID on GremlinEdge");
+
+        if (label == null || label.isBlank()) throw new IllegalStateException(
+                String.format("Missing label on GremlinEdge: %s", id));
+
+        if (this.sourceVertexInfo == null) throw new IllegalStateException(
+                String.format("Missing source vertex information on GremlinEdge: %s", id));
+
+        if (this.destinationVertexInfo == null) throw new IllegalStateException(
+                String.format("Missing destination vertex information on GremlinEdge: %s", id));
+
         if (partitionKey == null) throw new IllegalStateException(
                 String.format("Missing Partition Key on GremlinEdge ID: %s, Source ID: %s, Destination ID: %s",
                         this.id, this.sourceVertexInfo.getId(), this.getDestinationVertexInfo().getId()));
