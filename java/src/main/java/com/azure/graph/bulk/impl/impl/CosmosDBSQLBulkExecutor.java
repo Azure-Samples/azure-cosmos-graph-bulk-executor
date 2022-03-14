@@ -62,8 +62,6 @@ public class CosmosDBSQLBulkExecutor<V, E> implements GraphBulkExecutor<V, E> {
     private CosmosItemOperation getVertexOperation(GremlinVertex vertex) {
         var partitionKey = new PartitionKey(vertex.getPartitionKey().getValue());
 
-        //TODO: Review this to determine if there is a better approach to getting this operation created, one that
-        // doesn't have to deserialize the string that is already in the correct structure for the operation
         if (allowUpsert)
             return CosmosBulkOperations.getUpsertItemOperation(
                     new JsonSerializable(mapper.writeValueAsString(vertex)),
@@ -86,8 +84,6 @@ public class CosmosDBSQLBulkExecutor<V, E> implements GraphBulkExecutor<V, E> {
     private CosmosItemOperation getEdgeOperation(GremlinEdge edge) {
         var partitionKey = new PartitionKey(edge.getPartitionKey().getValue());
 
-        //TODO: Review this to determine if there is a better approach to getting this operation created, one that
-        // doesn't have to deserialize the string that is already in the correct structure for the operation
         if (allowUpsert)
             return CosmosBulkOperations.getUpsertItemOperation(
                     new JsonSerializable(mapper.writeValueAsString(edge)),
