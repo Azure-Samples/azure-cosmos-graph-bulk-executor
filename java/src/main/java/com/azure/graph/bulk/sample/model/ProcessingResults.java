@@ -87,7 +87,7 @@ public class ProcessingResults {
     }
 
     public String toJsonString() throws JsonProcessingException {
-        var mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
 
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 

@@ -14,8 +14,8 @@ class ProcessingResultsTest {
     @SneakyThrows
     @Test
     void emptySerialization() {
-        var processingResults = new ProcessingResults();
-        var jsonString = processingResults.toJsonString();
+        ProcessingResults processingResults = new ProcessingResults();
+        String jsonString = processingResults.toJsonString();
         assertNotNull(jsonString);
 
         assertTrue(jsonString.contains("\"startTime\":"));
@@ -30,14 +30,14 @@ class ProcessingResultsTest {
     @SneakyThrows
     @Test
     void startingAndStopping() {
-        var processingResults = new ProcessingResults();
+        ProcessingResults processingResults = new ProcessingResults();
 
         // Add some distance between start and stop
         Thread.sleep(10);
 
         processingResults.end();
 
-        var jsonString = processingResults.toJsonString();
+        String jsonString = processingResults.toJsonString();
 
         // Has an endTime that isn't 0
         assertTrue(jsonString.contains("\"endTime\":"));
@@ -54,9 +54,9 @@ class ProcessingResultsTest {
     @SneakyThrows
     @Test
     void settingCounts() {
-        var processingResults = new ProcessingResults();
+        ProcessingResults processingResults = new ProcessingResults();
         processingResults.setCounts(100, 500);
-        var jsonString = processingResults.toJsonString();
+        String jsonString = processingResults.toJsonString();
 
         // Has a vertexCount that is matches the count set
         assertTrue(jsonString.contains("\"vertexCount\":100"));
@@ -68,7 +68,7 @@ class ProcessingResultsTest {
     @SneakyThrows
     @Test
     void transitionState() {
-        var processingResults = new ProcessingResults();
+        ProcessingResults processingResults = new ProcessingResults();
         processingResults.setCounts(100, 500);
 
         //Simulate some state transitions
@@ -78,7 +78,7 @@ class ProcessingResultsTest {
         Thread.sleep(10);
         processingResults.end();
 
-        var jsonString = processingResults.toJsonString();
+        String jsonString = processingResults.toJsonString();
 
         // Has a vertexCount that is matches the count set
         assertTrue(jsonString.contains("\"states\":[{\"stateName\":\"Adding Counts\","));

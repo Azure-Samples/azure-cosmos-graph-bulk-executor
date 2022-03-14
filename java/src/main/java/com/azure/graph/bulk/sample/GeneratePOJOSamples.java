@@ -28,7 +28,7 @@ public class GeneratePOJOSamples {
 
     @SneakyThrows
     public static List<GremlinVertex> getVertices(int volume) {
-        var random = SecureRandom.getInstanceStrong();
+        SecureRandom random = SecureRandom.getInstanceStrong();
         return IntStream.range(1, volume + 1).mapToObj(
                         i -> generateVertex(random))
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -36,16 +36,16 @@ public class GeneratePOJOSamples {
 
     @SneakyThrows
     public static List<GremlinEdge> getEdges(List<GremlinVertex> vertices, int factor) {
-        var edges = new ArrayList<GremlinEdge>();
-        var random = SecureRandom.getInstanceStrong();
-        for (var vertex : vertices) {
-            var volume = random.nextInt(factor) + 1;
+        ArrayList<GremlinEdge> edges = new ArrayList<>();
+        SecureRandom random = SecureRandom.getInstanceStrong();
+        for (GremlinVertex vertex : vertices) {
+            int volume = random.nextInt(factor) + 1;
 
             for (int i = 1; i <= volume; i++) {
-                var randomRelationshipType = RelationshipTypes[
+                String randomRelationshipType = RelationshipTypes[
                         random.nextInt(RelationshipTypes.length - 1)];
 
-                var edge = GremlinEdge.builder()
+                GremlinEdge edge = GremlinEdge.builder()
                         .id(UUID.randomUUID().toString())
                         .sourceVertexInfo(GremlinEdgeVertexInfo.fromGremlinVertex(vertex))
                         .destinationVertexInfo(getRandomVertex(random, vertex.getId(), vertices))
@@ -62,7 +62,7 @@ public class GeneratePOJOSamples {
     private static GremlinEdgeVertexInfo getRandomVertex(Random random, String ignoreId, List<GremlinVertex> vertices) {
         GremlinEdgeVertexInfo vertex = null;
         while (vertex == null) {
-            var potentialVertex = vertices.get(random.nextInt(vertices.size() - 1));
+            GremlinVertex potentialVertex = vertices.get(random.nextInt(vertices.size() - 1));
             if (!Objects.equals(potentialVertex.getId(), ignoreId)) {
                 vertex = GremlinEdgeVertexInfo.fromGremlinVertex(potentialVertex);
             }
@@ -71,12 +71,12 @@ public class GeneratePOJOSamples {
     }
 
     private static GremlinVertex generateVertex(Random random) {
-        var firstName = firstNames[random.nextInt(firstNames.length - 1)];
-        var lastName = lastNames[random.nextInt(lastNames.length - 1)];
-        var country = countries[random.nextInt(countries.length - 1)];
-        var emailProvider = emailProviders[random.nextInt(emailProviders.length - 1)];
+        String firstName = firstNames[random.nextInt(firstNames.length - 1)];
+        String lastName = lastNames[random.nextInt(lastNames.length - 1)];
+        String country = countries[random.nextInt(countries.length - 1)];
+        String emailProvider = emailProviders[random.nextInt(emailProviders.length - 1)];
 
-        var vertex = GremlinVertex.builder()
+        GremlinVertex vertex = GremlinVertex.builder()
                 .id(UUID.randomUUID().toString())
                 .label("PERSON")
                 .properties(new HashMap<>())

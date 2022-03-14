@@ -48,11 +48,12 @@ public class GremlinEdgeVertexInfo {
             return new GremlinEdgeVertexInfo((GremlinVertex) from);
         }
 
-        var result = new GremlinEdgeVertexInfo();
+        GremlinEdgeVertexInfo result = new GremlinEdgeVertexInfo();
 
         Class<?> clazz = from.getClass();
 
-        var annotationClass = com.azure.graph.bulk.impl.annotations.GremlinVertex.class;
+        Class<com.azure.graph.bulk.impl.annotations.GremlinVertex> annotationClass =
+                com.azure.graph.bulk.impl.annotations.GremlinVertex.class;
         if (!clazz.isAnnotationPresent(annotationClass)) {
             throw new IllegalArgumentException(
                     "Class " + clazz.getSimpleName() + " is missing GremlinVertex annotation");
@@ -60,7 +61,6 @@ public class GremlinEdgeVertexInfo {
 
         result.label = clazz.getAnnotation(
                 com.azure.graph.bulk.impl.annotations.GremlinVertex.class).label();
-
 
         for (Field field : FieldUtils.getAllFields(clazz)) {
             if (field.isAnnotationPresent(GremlinId.class)) {

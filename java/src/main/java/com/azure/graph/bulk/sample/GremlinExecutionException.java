@@ -11,7 +11,6 @@ import java.util.Map;
 @Slf4j
 public class GremlinExecutionException extends Exception {
     public GremlinExecutionException(String e) {
-
         log.error(e);
     }
 

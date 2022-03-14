@@ -4,6 +4,7 @@
 package com.azure.graph.bulk.impl;
 
 import com.azure.graph.bulk.impl.model.GremlinEdge;
+import com.azure.graph.bulk.impl.model.GremlinEdgeVertexInfo;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
@@ -36,8 +37,8 @@ public class GremlinEdgeSerializer extends StdSerializer<GremlinEdge> {
         jsonGenerator.writeStringField(GremlinFieldNames.EDGE_ID, gremlinEdge.getId());
         jsonGenerator.writeStringField(GremlinFieldNames.EDGE_LABEL, gremlinEdge.getLabel());
 
-        var sourceVertexInfo = gremlinEdge.getSourceVertexInfo();
-        var destinationVertexInfo = gremlinEdge.getDestinationVertexInfo();
+        GremlinEdgeVertexInfo sourceVertexInfo = gremlinEdge.getSourceVertexInfo();
+        GremlinEdgeVertexInfo destinationVertexInfo = gremlinEdge.getDestinationVertexInfo();
 
         jsonGenerator.writeStringField(gremlinEdge.getPartitionKey().getFieldName(), gremlinEdge.getPartitionKey().getValue());
         jsonGenerator.writeStringField(GremlinFieldNames.EDGE_DESTINATIONV_PARTITION, destinationVertexInfo.getPartitionKey());

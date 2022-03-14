@@ -12,7 +12,7 @@ import java.util.Properties;
 public class DatabaseSettings {
     private static Properties Properties() {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        var properties = new Properties();
+        Properties properties = new Properties();
         try (InputStream resourceStream = loader.getResourceAsStream("application.properties")) {
             properties.load(resourceStream);
         } catch (IOException e) {

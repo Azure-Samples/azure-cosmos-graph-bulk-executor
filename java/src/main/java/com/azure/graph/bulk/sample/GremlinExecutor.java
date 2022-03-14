@@ -39,7 +39,7 @@ public interface GremlinExecutor {
 
     @Data
     @AllArgsConstructor
-    public class GremlinExecutorResult {
+    class GremlinExecutorResult {
         public List<Result> results;
         public Map<String, Object> statusAttributes;
     }

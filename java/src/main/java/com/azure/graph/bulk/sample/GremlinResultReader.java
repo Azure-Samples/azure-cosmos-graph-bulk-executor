@@ -22,7 +22,7 @@ public class GremlinResultReader {
     public static final String VALUE = "value";
 
     public GremlinSource createResponseFromResult(Result result) {
-        final var map = (Map<String, Object>) result.getObject();
+        final Map<String, Object> map = (Map<String, Object>) result.getObject();
         return createResponseFromMap(map);
     }
 
@@ -39,8 +39,9 @@ public class GremlinResultReader {
     public GremlinSource createResponseFromMap(Map<String, Object> map) {
         GremlinSource gremlinSource = GremlinSource.builder().build();
 
-        final var properties = Optional.ofNullable((Map<String, Object>) map.get(PROPERTIES));
-        properties.ifPresent(props -> props.forEach((key, value) -> gremlinSource.setProperty(key, this.readProperty(value))));
+        final Optional<Map<String, Object>> properties = Optional.ofNullable((Map<String, Object>) map.get(PROPERTIES));
+        properties.ifPresent(props -> props.forEach(
+                (key, value) -> gremlinSource.setProperty(key, this.readProperty(value))));
         gremlinSource.setId((String) map.get(ID));
         gremlinSource.setType((String) map.get(TYPE));
         gremlinSource.setLabel((String) map.get(LABEL));
@@ -64,7 +65,7 @@ public class GremlinResultReader {
         if (value instanceof String) {
             return value;
         }
-        final var mapList = (List<Map<String, String>>) value;
+        final List<Map<String, String>> mapList = (List<Map<String, String>>) value;
         if (mapList.size() > 1) {
             log.error("Properties values are more than 1 {} returned only first one and skipped rest of those", mapList);
         }

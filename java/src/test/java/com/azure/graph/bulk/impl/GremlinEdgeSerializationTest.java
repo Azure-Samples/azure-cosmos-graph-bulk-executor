@@ -30,8 +30,8 @@ class GremlinEdgeSerializationTest {
 
     @Test
     void testSerializationOfBasicGremlinEdge() throws JsonProcessingException {
-        var edge = getGremlinEdge();
-        var serializedContent = mapper.writeValueAsString(edge);
+        GremlinEdge edge = getGremlinEdge();
+        String serializedContent = mapper.writeValueAsString(edge);
 
         assertNotNull(serializedContent);
         assertTrue(serializedContent.contains("\"version\":\"2.0\""));

@@ -17,6 +17,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.azure.graph.bulk.sample.SeedGenerationValues.*;
+
 public class GenerateDomainSamples {
     private GenerateDomainSamples() {
         throw new IllegalStateException("Utility class, should not be constructed");
@@ -24,7 +26,7 @@ public class GenerateDomainSamples {
 
     @SneakyThrows
     public static List<PersonVertex> getVertices(int volume) {
-        var random = SecureRandom.getInstanceStrong();
+        SecureRandom random = SecureRandom.getInstanceStrong();
         return IntStream.range(1, volume + 1).mapToObj(
                         i -> generatePerson(random))
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -32,16 +34,17 @@ public class GenerateDomainSamples {
 
     @SneakyThrows
     public static List<RelationshipEdge> getEdges(List<PersonVertex> vertices, int factor) {
-        var edges = new ArrayList<RelationshipEdge>();
-        var random = SecureRandom.getInstanceStrong();
-        for (var vertex : vertices) {
-            var volume = random.nextInt(factor) + 1;
+        ArrayList<RelationshipEdge> edges = new ArrayList<>();
+        SecureRandom random = SecureRandom.getInstanceStrong();
+        for (PersonVertex vertex : vertices) {
+            int volume = random.nextInt(factor) + 1;
             for (int i = 1; i <= volume; i++) {
 
                 edges.add(new RelationshipEdge(
                         GremlinEdgeVertexInfo.fromGremlinVertex(vertex),
                         getRandomVertex(random, vertex.id, vertices),
-                        SeedGenerationValues.RelationshipTypes[random.nextInt(SeedGenerationValues.RelationshipTypes.length - 1)]));
+                        SeedGenerationValues.RelationshipTypes[
+                                random.nextInt(SeedGenerationValues.RelationshipTypes.length - 1)]));
             }
         }
         return edges;
@@ -50,7 +53,7 @@ public class GenerateDomainSamples {
     private static GremlinEdgeVertexInfo getRandomVertex(Random random, String sourceId, List<PersonVertex> vertices) {
         GremlinEdgeVertexInfo vertex = null;
         while (vertex == null) {
-            var potentialVertex = vertices.get(random.nextInt(vertices.size() - 1));
+            PersonVertex potentialVertex = vertices.get(random.nextInt(vertices.size() - 1));
             if (!Objects.equals(potentialVertex.getId(), sourceId)) {
                 vertex = GremlinEdgeVertexInfo.fromGremlinVertex(potentialVertex);
             }
@@ -59,10 +62,11 @@ public class GenerateDomainSamples {
     }
 
     private static PersonVertex generatePerson(Random random) {
-        var firstName = SeedGenerationValues.firstNames[random.nextInt(SeedGenerationValues.firstNames.length - 1)];
-        var lastName = SeedGenerationValues.lastNames[random.nextInt(SeedGenerationValues.lastNames.length - 1)];
-        var country = SeedGenerationValues.countries[random.nextInt(SeedGenerationValues.countries.length - 1)];
-        var emailProvider = SeedGenerationValues.emailProviders[random.nextInt(SeedGenerationValues.emailProviders.length - 1)];
+        String firstName = firstNames[random.nextInt(firstNames.length - 1)];
+        String lastName = lastNames[random.nextInt(lastNames.length - 1)];
+        String country = countries[random.nextInt(countries.length - 1)];
+        String emailProvider = emailProviders[random.nextInt(emailProviders.length - 1)];
+
         return PersonVertex.builder()
                 .id(UUID.randomUUID().toString())
                 .isSpecial(false)

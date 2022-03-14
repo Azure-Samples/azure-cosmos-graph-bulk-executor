@@ -15,6 +15,8 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 
+import java.util.List;
+
 @Slf4j
 public class Main {
 
@@ -23,7 +25,7 @@ public class Main {
     @SneakyThrows
     public static void main(String[] args) {
         try {
-            var options = getOptions();
+            Options options = getOptions();
             CommandLineParser parser = new DefaultParser();
             CommandLine cmd = parser.parse(options, args);
 
@@ -43,11 +45,11 @@ public class Main {
 
     private static void runDomainSample(CommandLine cmd) {
         results.transitionState("Build sample vertices");
-        var vertices = GenerateDomainSamples.getVertices(
+        List<PersonVertex> vertices = GenerateDomainSamples.getVertices(
                 Integer.parseInt(cmd.getOptionValue(ArgNames.VERTEX_COUNT)));
         results.transitionState("Build sample edges");
 
-        var edges = GenerateDomainSamples.getEdges(
+        List<RelationshipEdge> edges = GenerateDomainSamples.getEdges(
                 vertices,
                 Integer.parseInt(cmd.getOptionValue(ArgNames.EDGE_MAX)));
 
@@ -58,11 +60,11 @@ public class Main {
 
     private static void runPOJOSample(CommandLine cmd) {
         results.transitionState("Build sample vertices");
-        var vertices = GeneratePOJOSamples.getVertices(
+        List<GremlinVertex> vertices = GeneratePOJOSamples.getVertices(
                 Integer.parseInt(cmd.getOptionValue(ArgNames.VERTEX_COUNT)));
         results.transitionState("Build sample edges");
 
-        var edges = GeneratePOJOSamples.getEdges(
+        List<GremlinEdge> edges = GeneratePOJOSamples.getEdges(
                 vertices,
                 Integer.parseInt(cmd.getOptionValue(ArgNames.EDGE_MAX)));
 
@@ -94,14 +96,14 @@ public class Main {
 
     private static void executeWithDomain(Iterable<PersonVertex> vertices, Iterable<RelationshipEdge> edges) {
         results.transitionState("Configure Database");
-        var loader = new UploadWithBulkLoader<PersonVertex, RelationshipEdge>();
+        UploadWithBulkLoader<PersonVertex, RelationshipEdge> loader = new UploadWithBulkLoader<>();
         results.transitionState("Write Documents");
         loader.uploadDocuments(vertices, edges);
     }
 
     private static void executeWithPOJO(Iterable<GremlinVertex> vertices, Iterable<GremlinEdge> edges) {
         results.transitionState("Configure Database");
-        var loader = new UploadWithBulkLoader<GremlinVertex, GremlinEdge>();
+        UploadWithBulkLoader<GremlinVertex, GremlinEdge> loader = new UploadWithBulkLoader<>();
         results.transitionState("Write Documents");
         loader.uploadDocuments(vertices, edges);
     }

@@ -41,16 +41,16 @@ public class CosmosDBSQLBulkExecutor<V, E> implements GraphBulkExecutor<V, E> {
         if (vertices == null) vertices = new ArrayList<>();
         if (edges == null) edges = new ArrayList<>();
 
-        var vertexOperations = getVertexStream(vertices).map(this::getVertexOperation);
-        var edgeOperations = getEdgeStream(edges).map(this::getEdgeOperation);
-        var allOperations = Stream.concat(vertexOperations, edgeOperations);
+        Stream<CosmosItemOperation> vertexOperations = getVertexStream(vertices).map(this::getVertexOperation);
+        Stream<CosmosItemOperation> edgeOperations = getEdgeStream(edges).map(this::getEdgeOperation);
+        Stream<CosmosItemOperation> allOperations = Stream.concat(vertexOperations, edgeOperations);
 
         return container.executeBulkOperations(Flux.fromStream(allOperations));
     }
 
     private Stream<GremlinVertex> getVertexStream(Iterable<V> vertices) {
         return StreamSupport.stream(vertices.spliterator(), true).map(v -> {
-            var vertex = (v instanceof GremlinVertex) ?
+            GremlinVertex vertex = (v instanceof GremlinVertex) ?
                     (GremlinVertex) v :
                     ObjectToVertex.toGremlinVertex(v);
             vertex.validate();
@@ -60,7 +60,7 @@ public class CosmosDBSQLBulkExecutor<V, E> implements GraphBulkExecutor<V, E> {
 
     @SneakyThrows // Letting JsonProcessingException bubble up
     private CosmosItemOperation getVertexOperation(GremlinVertex vertex) {
-        var partitionKey = new PartitionKey(vertex.getPartitionKey().getValue());
+        PartitionKey partitionKey = new PartitionKey(vertex.getPartitionKey().getValue());
 
         if (allowUpsert)
             return CosmosBulkOperations.getUpsertItemOperation(
@@ -74,7 +74,7 @@ public class CosmosDBSQLBulkExecutor<V, E> implements GraphBulkExecutor<V, E> {
 
     private Stream<GremlinEdge> getEdgeStream(Iterable<E> edges) {
         return StreamSupport.stream(edges.spliterator(), true).map(e -> {
-            var edge = e instanceof GremlinEdge ? (GremlinEdge) e : ObjectToEdge.toGremlinEdge(e);
+            GremlinEdge edge = e instanceof GremlinEdge ? (GremlinEdge) e : ObjectToEdge.toGremlinEdge(e);
             edge.validate();
             return edge;
         });
@@ -82,7 +82,7 @@ public class CosmosDBSQLBulkExecutor<V, E> implements GraphBulkExecutor<V, E> {
 
     @SneakyThrows // Letting JsonProcessingException bubble up
     private CosmosItemOperation getEdgeOperation(GremlinEdge edge) {
-        var partitionKey = new PartitionKey(edge.getPartitionKey().getValue());
+        PartitionKey partitionKey = new PartitionKey(edge.getPartitionKey().getValue());
 
         if (allowUpsert)
             return CosmosBulkOperations.getUpsertItemOperation(

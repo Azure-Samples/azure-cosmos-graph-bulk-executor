@@ -3,6 +3,7 @@
 
 package com.azure.graph.bulk.impl;
 
+import com.azure.graph.bulk.impl.model.GremlinPartitionKey;
 import com.azure.graph.bulk.impl.model.GremlinVertex;
 import com.azure.graph.bulk.sample.model.PersonVertex;
 import lombok.SneakyThrows;
@@ -17,8 +18,8 @@ class ObjectToVertexTest {
     @SneakyThrows
     @Test
     void PersonVertexToGremlinVertexTest() {
-        var source = getPersonVertex();
-        var converted = ObjectToVertex.toGremlinVertex(source);
+        PersonVertex source = getPersonVertex();
+        GremlinVertex converted = ObjectToVertex.toGremlinVertex(source);
 
         assertEquals("PERSON", converted.getLabel());
         assertEquals(source.getId(), converted.getId());
@@ -34,7 +35,7 @@ class ObjectToVertexTest {
     }
 
     private void validatePartitionKey(PersonVertex source, GremlinVertex converted) {
-        var partitionKey = converted.getPartitionKey();
+        GremlinPartitionKey partitionKey = converted.getPartitionKey();
 
         assertNotNull(partitionKey);
         assertEquals("country", partitionKey.getFieldName());

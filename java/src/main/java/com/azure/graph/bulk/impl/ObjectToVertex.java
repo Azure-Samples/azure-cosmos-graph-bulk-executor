@@ -40,7 +40,7 @@ public final class ObjectToVertex {
     public static com.azure.graph.bulk.impl.model.GremlinVertex toGremlinVertex(Object from) {
         Class<?> clazz = from.getClass();
 
-        var results = com.azure.graph.bulk.impl.model.GremlinVertex.builder()
+        com.azure.graph.bulk.impl.model.GremlinVertex results = com.azure.graph.bulk.impl.model.GremlinVertex.builder()
                 .properties(new HashMap<>())
                 .build();
 
@@ -61,14 +61,14 @@ public final class ObjectToVertex {
      * @param results the GremlinVertex being updated
      */
     private static void setLabelFromClass(Class<?> clazz, com.azure.graph.bulk.impl.model.GremlinVertex results) {
-        var annotationClass = GremlinVertex.class;
+        Class<GremlinVertex> annotationClass = GremlinVertex.class;
         if (!clazz.isAnnotationPresent(annotationClass)) {
             throw new IllegalArgumentException(
                     "Class " + clazz.getSimpleName() + " is missing GremlinVertex annotation");
         }
 
-        var vertexAnnotation = clazz.getAnnotation(annotationClass);
-        var label = vertexAnnotation.label();
+        GremlinVertex vertexAnnotation = clazz.getAnnotation(annotationClass);
+        String label = vertexAnnotation.label();
 
         if (!label.isBlank()) {
             results.setLabel(label);
@@ -130,13 +130,14 @@ public final class ObjectToVertex {
      */
     private static void setPartitionKey(Field field, com.azure.graph.bulk.impl.model.GremlinVertex results, Object from)
             throws IllegalAccessException {
-        var pkAnnotationClass = GremlinPartitionKey.class;
+        Class<GremlinPartitionKey> pkAnnotationClass = GremlinPartitionKey.class;
         if (field.isAnnotationPresent(pkAnnotationClass)) {
-            var pkAnnotation = field.getAnnotation(pkAnnotationClass);
+            GremlinPartitionKey pkAnnotation = field.getAnnotation(pkAnnotationClass);
 
-            var pk = new com.azure.graph.bulk.impl.model.GremlinPartitionKey(
-                    pkAnnotation.fieldName().isBlank() ? field.getName() : pkAnnotation.fieldName(),
-                    (String) field.get(from));
+            com.azure.graph.bulk.impl.model.GremlinPartitionKey pk =
+                    new com.azure.graph.bulk.impl.model.GremlinPartitionKey(
+                            pkAnnotation.fieldName().isBlank() ? field.getName() : pkAnnotation.fieldName(),
+                            (String) field.get(from));
 
             results.setPartitionKey(pk);
         }
@@ -170,7 +171,7 @@ public final class ObjectToVertex {
             throws InvocationTargetException, IllegalAccessException {
         for (Method method : MethodUtils.getMethodsWithAnnotation(clazz, GremlinLabelGetter.class)) {
             if (!method.isAnnotationPresent(GremlinLabelGetter.class)) continue;
-            var vertexLabel = (String) method.invoke(from);
+            String vertexLabel = (String) method.invoke(from);
 
             if (!vertexLabel.isBlank()) {
                 results.setLabel(vertexLabel);
@@ -190,12 +191,11 @@ public final class ObjectToVertex {
     private static void setPropertyMap(Field field, com.azure.graph.bulk.impl.model.GremlinVertex results, Object from) throws IllegalAccessException {
         if (!field.isAnnotationPresent(GremlinPropertyMap.class)) return;
 
-        var value = field.get(from);
+        Object value = field.get(from);
 
         if (value instanceof Map) {
-            //TODO: Determine impacts to forcing the Data Type of the value to at least be serializable
             //noinspection unchecked
-            var properties = (Map<String, Object>) value;
+            Map<String, Object> properties = (Map<String, Object>) value;
             properties.forEach((k, v) -> {
                 if (v != null) {
                     results.addProperty(k, v);
@@ -222,9 +222,9 @@ public final class ObjectToVertex {
                 field.isAnnotationPresent(GremlinPropertyMap.class)
         ) return;
 
-        var value = field.get(from);
+        Object value = field.get(from);
         if (value != null) {
-            var key = field.getName();
+            String key = field.getName();
             if (field.isAnnotationPresent(GremlinProperty.class)) {
                 key = field.getAnnotation(GremlinProperty.class).name();
             }

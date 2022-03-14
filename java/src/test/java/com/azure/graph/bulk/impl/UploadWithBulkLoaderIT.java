@@ -15,6 +15,7 @@ import com.azure.graph.bulk.sample.GenerateDomainSamples;
 import com.azure.graph.bulk.sample.GremlinCluster;
 import com.azure.graph.bulk.sample.GremlinExecutor;
 import com.azure.graph.bulk.sample.GremlinResultReader;
+import com.azure.graph.bulk.sample.GremlinSource;
 import com.azure.graph.bulk.sample.UploadWithBulkLoader;
 import com.azure.graph.bulk.sample.model.PersonVertex;
 import com.azure.graph.bulk.sample.model.RelationshipEdge;
@@ -22,6 +23,8 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,7 +47,8 @@ class UploadWithBulkLoaderIT {
 
         // Delete database
         try {
-            CosmosDatabaseResponse dbResp = client.getDatabase(DatabaseSettings.DATABASE_NAME).delete(new CosmosDatabaseRequestOptions());
+            CosmosDatabaseResponse dbResp =
+                    client.getDatabase(DatabaseSettings.DATABASE_NAME).delete(new CosmosDatabaseRequestOptions());
         } catch (CosmosException e) {
         }
     }
@@ -53,11 +57,11 @@ class UploadWithBulkLoaderIT {
     @Test
     void UploadWithBulkLoaderTest() {
         // Generate vertices and edges for testing
-        var vertices = GenerateDomainSamples.getVertices(10);
-        var edges = GenerateDomainSamples.getEdges(vertices, 5);
+        List<PersonVertex> vertices = GenerateDomainSamples.getVertices(10);
+        List<RelationshipEdge> edges = GenerateDomainSamples.getEdges(vertices, 5);
 
         // Upload
-        var loader = new UploadWithBulkLoader<PersonVertex, RelationshipEdge>();
+        UploadWithBulkLoader<PersonVertex, RelationshipEdge> loader = new UploadWithBulkLoader<>();
         loader.uploadDocuments(vertices, edges);
 
         // Read data from CosmosDB
@@ -65,8 +69,9 @@ class UploadWithBulkLoaderIT {
         GremlinExecutor gremlinExecutor = new CosmosDBGremlinExecutor(new GremlinCluster());
 
         gremlinExecutor.connect();
-        var results = gremlinExecutor.executeString("g.V().hasLabel('PERSON')");
-        var gremlinVertices = gremlinResultReader.createResponseFromResultList(results.results);
+        GremlinExecutor.GremlinExecutorResult results =
+                gremlinExecutor.executeString("g.V().hasLabel('PERSON')");
+        List<GremlinSource> gremlinVertices = gremlinResultReader.createResponseFromResultList(results.results);
 
         // Verify data upserted is equal to data read using tinkerpop
         assertEquals(vertices.size(), gremlinVertices.size());
@@ -74,6 +79,5 @@ class UploadWithBulkLoaderIT {
         assertEquals("PERSON", gremlinVertices.get(0).getLabel());
         assertEquals("vertex", gremlinVertices.get(0).getType());
         assertEquals(vertices.get(0).getCountry(), gremlinVertices.get(0).getProperties().get("country"));
-
     }
 }

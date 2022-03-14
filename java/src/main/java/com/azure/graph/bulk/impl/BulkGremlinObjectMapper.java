@@ -17,13 +17,13 @@ public final class BulkGremlinObjectMapper {
      * Defines an ObjectMapper that has the Serialization Modules for both GremlinVertex and GremlinEdge classes
      */
     public static ObjectMapper getBulkGremlinObjectMapper() {
-        var mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
 
-        var vertexModule = new SimpleModule("GremlinVertexModule");
+        SimpleModule vertexModule = new SimpleModule("GremlinVertexModule");
         vertexModule.addSerializer(GremlinVertex.class, new GremlinVertexSerializer(GremlinVertex.class));
         mapper.registerModule(vertexModule);
 
-        var edgeModule = new SimpleModule("GremlinEdgeModule");
+        SimpleModule edgeModule = new SimpleModule("GremlinEdgeModule");
         edgeModule.addSerializer(GremlinEdge.class, new GremlinEdgeSerializer(GremlinEdge.class));
         mapper.registerModule(edgeModule);
 

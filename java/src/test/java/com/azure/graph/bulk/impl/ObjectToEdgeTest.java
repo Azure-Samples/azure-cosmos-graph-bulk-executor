@@ -3,6 +3,7 @@
 
 package com.azure.graph.bulk.impl;
 
+import com.azure.graph.bulk.impl.model.GremlinEdge;
 import com.azure.graph.bulk.impl.model.GremlinEdgeVertexInfo;
 import com.azure.graph.bulk.sample.model.RelationshipEdge;
 import lombok.SneakyThrows;
@@ -17,12 +18,13 @@ class ObjectToEdgeTest {
     @SneakyThrows
     @Test
     void RelationshipEdgeToGremlinEdgeTest() {
-        var edge = getRelationshipGraphEdge();
-        var results = ObjectToEdge.toGremlinEdge(edge);
+        RelationshipEdge edge = getRelationshipGraphEdge();
+        GremlinEdge results = ObjectToEdge.toGremlinEdge(edge);
 
         assertEquals(edge.getDestinationVertexInfo().getId(), results.getDestinationVertexInfo().getId());
         assertEquals(edge.getSourceVertexInfo().getId(), results.getSourceVertexInfo().getId());
-        assertEquals(edge.getDestinationVertexInfo().getPartitionKey(), results.getDestinationVertexInfo().getPartitionKey());
+        assertEquals(edge.getDestinationVertexInfo().getPartitionKey(),
+                results.getDestinationVertexInfo().getPartitionKey());
         assertEquals(edge.getSourceVertexInfo().getPartitionKey(), results.getSourceVertexInfo().getPartitionKey());
         assertEquals(edge.getDestinationVertexInfo().getLabel(), results.getDestinationVertexInfo().getLabel());
         assertEquals(edge.getSourceVertexInfo().getLabel(), results.getSourceVertexInfo().getLabel());
@@ -32,7 +34,7 @@ class ObjectToEdgeTest {
     }
 
     private RelationshipEdge getRelationshipGraphEdge() {
-        var edge = new RelationshipEdge(
+        RelationshipEdge edge = new RelationshipEdge(
                 new GremlinEdgeVertexInfo(
                         UUID.randomUUID().toString(),
                         "REL1",

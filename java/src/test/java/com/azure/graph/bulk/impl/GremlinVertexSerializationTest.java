@@ -29,8 +29,8 @@ class GremlinVertexSerializationTest {
 
     @Test
     void testSerializationOfBasicGremlinVertex() throws JsonProcessingException {
-        var vertex = getGremlinVertex();
-        var serializedContent = mapper.writeValueAsString(vertex);
+        GremlinVertex vertex = getGremlinVertex();
+        String serializedContent = mapper.writeValueAsString(vertex);
 
         assertNotNull(serializedContent);
         assertTrue(serializedContent.contains("\"_value\":\"1.0\""));

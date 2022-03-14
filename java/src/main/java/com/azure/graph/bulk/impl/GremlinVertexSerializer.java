@@ -3,6 +3,7 @@
 
 package com.azure.graph.bulk.impl;
 
+import com.azure.graph.bulk.impl.model.GremlinPartitionKey;
 import com.azure.graph.bulk.impl.model.GremlinVertex;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -37,7 +38,7 @@ public class GremlinVertexSerializer extends StdSerializer<GremlinVertex> {
 
         jsonGenerator.writeStringField(GremlinFieldNames.VERTEX_LABEL, gremlinVertex.getLabel());
 
-        var partitionKey = gremlinVertex.getPartitionKey();
+        GremlinPartitionKey partitionKey = gremlinVertex.getPartitionKey();
 
         jsonGenerator.writeStringField(partitionKey.getFieldName(), partitionKey.getValue());
 

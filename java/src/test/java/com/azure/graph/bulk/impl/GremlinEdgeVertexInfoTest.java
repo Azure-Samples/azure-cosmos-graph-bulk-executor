@@ -14,10 +14,10 @@ class GremlinEdgeVertexInfoTest {
 
     @Test
     void TestEquityWithJustId() {
-        var id = UUID.randomUUID().toString();
+        String id = UUID.randomUUID().toString();
 
-        var eviOne = new GremlinEdgeVertexInfo(id);
-        var eviTwo = new GremlinEdgeVertexInfo(id);
+        GremlinEdgeVertexInfo eviOne = new GremlinEdgeVertexInfo(id);
+        GremlinEdgeVertexInfo eviTwo = new GremlinEdgeVertexInfo(id);
 
         assertEquals(eviOne, eviTwo);
         assertEquals(eviOne.hashCode(), eviTwo.hashCode());
