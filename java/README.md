@@ -1,8 +1,7 @@
 # Azure Cosmos sample for Java for Bulk ingestion and capabilities on Gremlin API accounts
 
 This sample uses the Java SDK v4.x.x for Cosmos Db to execute bulk operations against a Cosmos Database that has been
-configured to use the Gremlin API. It is a port of the
-.Net  [GraphBulkExecutorV3](https://github.com/ealsur/GraphBulkExecutorV3).
+configured to use the Gremlin API.
 
 This sample is useful when hitting performance issues when uploading Vertices and Edges in bulk.
 
