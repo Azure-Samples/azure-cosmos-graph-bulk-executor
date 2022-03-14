@@ -116,7 +116,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>libs/</classpathPrefix>
-                            <mainClass>com.microsoft.graph.bulk.sample.Main</mainClass>
+                            <mainClass>com.azure.graph.bulk.sample.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -130,7 +130,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>libs/</classpathPrefix>
-                            <mainClass>com.microsoft.graph.bulk.sample.Main</mainClass>
+                            <mainClass>com.azure.graph.bulk.sample.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
