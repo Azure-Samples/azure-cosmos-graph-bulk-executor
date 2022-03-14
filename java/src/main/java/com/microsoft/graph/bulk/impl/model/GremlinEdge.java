@@ -23,7 +23,6 @@ public class GremlinEdge {
 
     private GremlinPartitionKey partitionKey;
 
-    //TODO: Evaluate impacts to changing this to be a HashMap<String, Serializable>
     private HashMap<String, Object> properties;
 
     public GremlinEdge() {
