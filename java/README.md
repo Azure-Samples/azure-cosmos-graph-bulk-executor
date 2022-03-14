@@ -1,6 +1,6 @@
 # GraphBulkExecutor Java Sample
 
-This sample uses the Java SDK 4.0 for Cosmos Db to execute bulk operations against a Cosmos Database that has been configured to use the Gremlin API. It is a port of the .Net  [GraphBulkExecutorV3](https://github.com/ealsur/GraphBulkExecutorV3).
+This sample uses the Java SDK v4.x.x for Cosmos Db to execute bulk operations against a Cosmos Database that has been configured to use the Gremlin API. It is a port of the .Net  [GraphBulkExecutorV3](https://github.com/ealsur/GraphBulkExecutorV3).
 
 This sample is useful when hitting performance issues when uploading Vertices and Edges in bulk.
 
