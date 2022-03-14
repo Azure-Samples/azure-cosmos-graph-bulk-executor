@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.UUID;
 
 /**
  * Serializer capable to serializing a GremlinVertex in the structure required by the CosmosDb Graph database
@@ -47,8 +48,8 @@ public class GremlinVertexSerializer extends StdSerializer<GremlinVertex> {
                 try {
                     jsonGenerator.writeArrayFieldStart(key);
                     jsonGenerator.writeStartObject();
-                    jsonGenerator.writeStringField(GremlinFieldNames.PROPERTY_ID, value.getId());
-                    jsonGenerator.writeObjectField(GremlinFieldNames.PROPERTY_VALUE, value.getValue());
+                    jsonGenerator.writeStringField(GremlinFieldNames.PROPERTY_ID, UUID.randomUUID().toString());
+                    jsonGenerator.writeObjectField(GremlinFieldNames.PROPERTY_VALUE, value);
                     jsonGenerator.writeEndObject();
                     jsonGenerator.writeEndArray();
                 } catch (IOException e) {

@@ -16,7 +16,7 @@ public class GremlinVertex {
     private String id;
     private String label;
     private GremlinPartitionKey partitionKey;
-    private HashMap<String, GremlinVertexProperty> properties;
+    private HashMap<String, Object> properties;
 
     public void addProperty(String key, Object value) {
         addProperty(key, value, false);
@@ -28,7 +28,7 @@ public class GremlinVertex {
         if (isPartitionKey) {
             partitionKey = new GremlinPartitionKey(key, value.toString());
         } else {
-            properties.put(key, new GremlinVertexProperty(value));
+            properties.put(key, value);
         }
     }
 

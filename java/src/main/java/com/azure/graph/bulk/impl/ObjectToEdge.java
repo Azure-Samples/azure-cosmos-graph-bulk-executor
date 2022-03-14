@@ -103,7 +103,7 @@ public final class ObjectToEdge {
         for (Field field : FieldUtils.getAllFields(clazz)) {
             if (isStatic(field.getModifiers()) || !field.canAccess(from)) continue; // Field is not accessible
             setIdValue(field, results, from);
-            if (results.getLabel() == null) {
+            if (results.getLabel() == null || results.getLabel().isBlank()) {
                 setLabel(field, results, from);
             }
             setSourceVertexValues(clazz, field, results, from);
@@ -143,7 +143,7 @@ public final class ObjectToEdge {
 
         results.setId((String) field.get(from));
 
-        if (results.getId() == null) {
+        if (results.getId() == null || results.getId().isBlank()) {
             throw new IllegalArgumentException(
                     "GremlinId cannot be null, please ensure " + field.getName() + " is populated.");
         }
