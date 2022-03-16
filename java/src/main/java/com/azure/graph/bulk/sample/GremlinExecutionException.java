@@ -3,13 +3,17 @@
 
 package com.azure.graph.bulk.sample;
 
-import lombok.extern.slf4j.Slf4j;
+
 import org.apache.tinkerpop.gremlin.driver.exception.ResponseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-@Slf4j
+
 public class GremlinExecutionException extends Exception {
+    private static final Logger log = LoggerFactory.getLogger(GremlinExecutionException.class);
+
     public GremlinExecutionException(String e) {
         log.error(e);
     }

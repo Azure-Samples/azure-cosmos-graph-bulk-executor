@@ -9,7 +9,6 @@ import com.azure.graph.bulk.sample.model.PersonVertex;
 import com.azure.graph.bulk.sample.model.ProcessingResults;
 import com.azure.graph.bulk.sample.model.RelationshipEdge;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -17,9 +16,8 @@ import org.apache.commons.cli.Options;
 
 import java.util.List;
 
-@Slf4j
-public class Main {
 
+public class Main {
     private static final ProcessingResults results = new ProcessingResults();
 
     @SneakyThrows

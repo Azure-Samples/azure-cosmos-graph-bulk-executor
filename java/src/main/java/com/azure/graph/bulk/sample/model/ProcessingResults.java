@@ -9,13 +9,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
-@Slf4j
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class ProcessingResults {
+    private static final Logger log = LoggerFactory.getLogger(ProcessingResults.class);
     private final static long nanoSecondsInAMinute = 60000000000l;
 
     @JsonAutoDetect(fieldVisibility = Visibility.ANY)

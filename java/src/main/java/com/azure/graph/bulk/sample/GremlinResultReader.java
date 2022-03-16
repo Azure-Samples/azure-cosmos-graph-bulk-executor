@@ -4,17 +4,18 @@
 package com.azure.graph.bulk.sample;
 
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.tinkerpop.gremlin.driver.Result;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Slf4j
-public class GremlinResultReader {
 
+public class GremlinResultReader {
+    private static final Logger log = LoggerFactory.getLogger(GremlinResultReader.class);
     public static final String ID = "id";
     public static final String LABEL = "label";
     public static final String TYPE = "type";

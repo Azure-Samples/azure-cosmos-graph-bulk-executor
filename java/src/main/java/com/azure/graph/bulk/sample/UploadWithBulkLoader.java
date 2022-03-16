@@ -16,11 +16,13 @@ import com.azure.cosmos.models.ThroughputProperties;
 import com.azure.graph.bulk.impl.BulkGremlinObjectMapper;
 import com.azure.graph.bulk.impl.impl.CosmosDBSQLBulkExecutor;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
 
-@Slf4j
+
 public class UploadWithBulkLoader<V, E> {
+    private static final Logger log = LoggerFactory.getLogger(UploadWithBulkLoader.class);
     private final CosmosAsyncClient client;
 
     private CosmosAsyncDatabase database;

@@ -16,15 +16,17 @@ import com.azure.graph.bulk.impl.model.GremlinEdge;
 import com.azure.graph.bulk.impl.model.GremlinVertex;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-@Slf4j
+
 public class CosmosDBSQLBulkExecutor<V, E> implements GraphBulkExecutor<V, E> {
+    private static final Logger log = LoggerFactory.getLogger(CosmosDBSQLBulkExecutor.class);
     private final CosmosAsyncContainer container;
     private final ObjectMapper mapper;
     private final boolean allowUpsert;

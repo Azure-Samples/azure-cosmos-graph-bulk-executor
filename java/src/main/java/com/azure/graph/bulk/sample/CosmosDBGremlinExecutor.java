@@ -3,12 +3,14 @@
 
 package com.azure.graph.bulk.sample;
 
-import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tinkerpop.gremlin.driver.Client;
 import org.apache.tinkerpop.gremlin.driver.Result;
 import org.apache.tinkerpop.gremlin.driver.ResultSet;
 import org.apache.tinkerpop.gremlin.driver.exception.ResponseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import java.time.Duration;
@@ -18,9 +20,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-@Slf4j
-public class CosmosDBGremlinExecutor implements GremlinExecutor {
 
+public class CosmosDBGremlinExecutor implements GremlinExecutor {
+    private static final Logger log = LoggerFactory.getLogger(CosmosDBGremlinExecutor.class);
     private final GremlinCluster cluster;
     private Client client;
     private final Long maxRetryAfterMs;
