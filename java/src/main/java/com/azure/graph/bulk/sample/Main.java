@@ -8,7 +8,6 @@ import com.azure.graph.bulk.impl.model.GremlinVertex;
 import com.azure.graph.bulk.sample.model.PersonVertex;
 import com.azure.graph.bulk.sample.model.ProcessingResults;
 import com.azure.graph.bulk.sample.model.RelationshipEdge;
-import lombok.SneakyThrows;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -20,7 +19,6 @@ import java.util.List;
 public class Main {
     private static final ProcessingResults results = new ProcessingResults();
 
-    @SneakyThrows
     public static void main(String[] args) {
         try {
             Options options = getOptions();

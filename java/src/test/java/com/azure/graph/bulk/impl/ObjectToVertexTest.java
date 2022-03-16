@@ -6,7 +6,6 @@ package com.azure.graph.bulk.impl;
 import com.azure.graph.bulk.impl.model.GremlinPartitionKey;
 import com.azure.graph.bulk.impl.model.GremlinVertex;
 import com.azure.graph.bulk.sample.model.PersonVertex;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -15,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ObjectToVertexTest {
 
-    @SneakyThrows
     @Test
     void PersonVertexToGremlinVertexTest() {
         PersonVertex source = getPersonVertex();

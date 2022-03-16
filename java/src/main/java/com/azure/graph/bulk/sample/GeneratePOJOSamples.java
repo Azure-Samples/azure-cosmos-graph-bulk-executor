@@ -7,8 +7,9 @@ import com.azure.graph.bulk.impl.model.GremlinEdge;
 import com.azure.graph.bulk.impl.model.GremlinEdgeVertexInfo;
 import com.azure.graph.bulk.impl.model.GremlinPartitionKey;
 import com.azure.graph.bulk.impl.model.GremlinVertex;
-import lombok.SneakyThrows;
+import com.azure.graph.bulk.sample.model.DataGenerationException;
 
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,35 +27,44 @@ public class GeneratePOJOSamples {
         throw new IllegalStateException("Utility class, should not be constructed");
     }
 
-    @SneakyThrows
     public static List<GremlinVertex> getVertices(int volume) {
-        SecureRandom random = SecureRandom.getInstanceStrong();
-        return IntStream.range(1, volume + 1).mapToObj(
-                        i -> generateVertex(random))
-                .collect(Collectors.toCollection(ArrayList::new));
+        try {
+            SecureRandom random = SecureRandom.getInstanceStrong();
+
+            return IntStream.range(1, volume + 1).mapToObj(
+                            i -> generateVertex(random))
+                    .collect(Collectors.toCollection(ArrayList::new));
+        } catch (NoSuchAlgorithmException e) {
+            throw new DataGenerationException(e);
+        }
     }
 
-    @SneakyThrows
     public static List<GremlinEdge> getEdges(List<GremlinVertex> vertices, int factor) {
         ArrayList<GremlinEdge> edges = new ArrayList<>();
-        SecureRandom random = SecureRandom.getInstanceStrong();
-        for (GremlinVertex vertex : vertices) {
-            int volume = random.nextInt(factor) + 1;
 
-            for (int i = 1; i <= volume; i++) {
-                String randomRelationshipType = RelationshipTypes[
-                        random.nextInt(RelationshipTypes.length - 1)];
+        try {
+            SecureRandom random = SecureRandom.getInstanceStrong();
 
-                GremlinEdge edge = GremlinEdge.builder()
-                        .id(UUID.randomUUID().toString())
-                        .sourceVertexInfo(GremlinEdgeVertexInfo.fromGremlinVertex(vertex))
-                        .destinationVertexInfo(getRandomVertex(random, vertex.getId(), vertices))
-                        .partitionKey(vertex.getPartitionKey())
-                        .label(randomRelationshipType)
-                        .properties(new HashMap<>())
-                        .build();
-                edges.add(edge);
+            for (GremlinVertex vertex : vertices) {
+                int volume = random.nextInt(factor) + 1;
+
+                for (int i = 1; i <= volume; i++) {
+                    String randomRelationshipType = RelationshipTypes[
+                            random.nextInt(RelationshipTypes.length - 1)];
+
+                    GremlinEdge edge = GremlinEdge.builder()
+                            .id(UUID.randomUUID().toString())
+                            .sourceVertexInfo(GremlinEdgeVertexInfo.fromGremlinVertex(vertex))
+                            .destinationVertexInfo(getRandomVertex(random, vertex.getId(), vertices))
+                            .partitionKey(vertex.getPartitionKey())
+                            .label(randomRelationshipType)
+                            .properties(new HashMap<>())
+                            .build();
+                    edges.add(edge);
+                }
             }
+        } catch (NoSuchAlgorithmException e) {
+            throw new DataGenerationException(e);
         }
         return edges;
     }

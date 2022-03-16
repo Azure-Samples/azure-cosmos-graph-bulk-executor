@@ -6,7 +6,7 @@ package com.azure.graph.bulk.impl;
 import com.azure.graph.bulk.impl.annotations.*;
 import com.azure.graph.bulk.impl.annotations.GremlinEdgeVertex.Direction;
 import com.azure.graph.bulk.impl.model.GremlinEdgeVertexInfo;
-import lombok.SneakyThrows;
+import com.azure.graph.bulk.impl.model.ObjectConversionException;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 
@@ -28,7 +28,6 @@ public final class ObjectToEdge {
      * @param from object to convert into a GremlinEdge
      * @return An instance of the GremlinEdge object based on the values extracted from the object provided
      */
-    @SneakyThrows
     public static com.azure.graph.bulk.impl.model.GremlinEdge toGremlinEdge(Object from) {
         Class<?> clazz = from.getClass();
 
@@ -70,17 +69,20 @@ public final class ObjectToEdge {
      * @param clazz   the class of the object being used
      * @param results the GremlinEdge being updated
      * @param from    the instance of the class to extract the values from
-     * @throws InvocationTargetException When the method executed throws an exceptions
-     * @throws IllegalAccessException    Guards in place to prevent exception from being thrown
      */
     private static void setLabelFromGetter(Class<?> clazz,
                                            com.azure.graph.bulk.impl.model.GremlinEdge results,
-                                           Object from)
-            throws InvocationTargetException, IllegalAccessException {
+                                           Object from) {
         for (Method method : MethodUtils.getMethodsWithAnnotation(clazz, GremlinLabelGetter.class)) {
             if (isStatic(method.getModifiers()) || !method.canAccess(from))
                 continue; // method is not accessible, attempts to call it will fail.
-            String edgeLabel = (String) method.invoke(from);
+            String edgeLabel = null;
+
+            try {
+                edgeLabel = (String) method.invoke(from);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new ObjectConversionException(e);
+            }
 
             if (!edgeLabel.isBlank()) {
                 results.setLabel(edgeLabel);
@@ -96,7 +98,6 @@ public final class ObjectToEdge {
      * @param results the GremlinEdge being updated
      * @param from    the instance of the class to extract the values from
      */
-    @SneakyThrows
     private static void setFieldValues(Class<?> clazz,
                                        com.azure.graph.bulk.impl.model.GremlinEdge results,
                                        Object from) {
@@ -120,13 +121,17 @@ public final class ObjectToEdge {
      * @param field   the field definition to extract the value using
      * @param results the GremlinEdge being updated
      * @param from    the instance of the class to extract the values from
-     * @throws IllegalAccessException When the field is not accessible from this utility
      */
-    private static void setLabel(Field field, com.azure.graph.bulk.impl.model.GremlinEdge results, Object from)
-            throws IllegalAccessException {
+    private static void setLabel(Field field,
+                                 com.azure.graph.bulk.impl.model.GremlinEdge results,
+                                 Object from) {
         if (!field.isAnnotationPresent(GremlinLabel.class)) return;
 
-        results.setLabel((String) field.get(from));
+        try {
+            results.setLabel((String) field.get(from));
+        } catch (IllegalAccessException e) {
+            throw new ObjectConversionException(e);
+        }
     }
 
     /**
@@ -135,13 +140,17 @@ public final class ObjectToEdge {
      * @param field   the field definition to extract the value using
      * @param results the GremlinEdge being updated
      * @param from    the instance of the class to extract the values from
-     * @throws IllegalAccessException When the field is not accessible from this utility
      */
-    private static void setIdValue(Field field, com.azure.graph.bulk.impl.model.GremlinEdge results, Object from)
-            throws IllegalAccessException {
+    private static void setIdValue(Field field,
+                                   com.azure.graph.bulk.impl.model.GremlinEdge results,
+                                   Object from) {
         if (!field.isAnnotationPresent(GremlinId.class)) return;
 
-        results.setId((String) field.get(from));
+        try {
+            results.setId((String) field.get(from));
+        } catch (IllegalAccessException e) {
+            throw new ObjectConversionException(e);
+        }
 
         if (results.getId() == null || results.getId().isBlank()) {
             throw new IllegalArgumentException(
@@ -159,11 +168,10 @@ public final class ObjectToEdge {
      * @param field   the field definition to extract the value using
      * @param results the GremlinEdge being updated
      * @param from    the instance of the class to extract the values from
-     * @throws IllegalAccessException When the field is not accessible from this utility
      */
     private static void setSourceVertexValues(Class<?> clazz, Field field,
-                                              com.azure.graph.bulk.impl.model.GremlinEdge results, Object from)
-            throws IllegalAccessException {
+                                              com.azure.graph.bulk.impl.model.GremlinEdge results,
+                                              Object from) {
         if (field.isAnnotationPresent(GremlinEdgeVertex.class)
                 && field.getAnnotation(GremlinEdgeVertex.class).Direction() == Direction.SOURCE) {
             Class<GremlinEdge> annotationClass = GremlinEdge.class;
@@ -190,14 +198,13 @@ public final class ObjectToEdge {
      * @param field   the field definition to extract the value using
      * @param results the GremlinEdge being updated
      * @param from    the instance of the class to extract the values from
-     * @throws IllegalAccessException When the field is not accessible from this utility
      */
     private static void setDestinationVertexValues(Field field,
                                                    com.azure.graph.bulk.impl.model.GremlinEdge results,
-                                                   Object from)
-            throws IllegalAccessException {
+                                                   Object from) {
         if (field.isAnnotationPresent(GremlinEdgeVertex.class)
                 && field.getAnnotation(GremlinEdgeVertex.class).Direction() == Direction.DESTINATION) {
+            
             GremlinEdgeVertexInfo vertexInfo = getVertexInfo(field, from);
 
             results.setDestinationVertexInfo(vertexInfo);
@@ -212,10 +219,14 @@ public final class ObjectToEdge {
      * @param field the field definition to extract the value using
      * @param from  the instance of the class to extract the values from
      * @return the extracted GremlinEdgeVertexInfo values
-     * @throws IllegalAccessException When the field is not accessible from this utility
      */
-    private static GremlinEdgeVertexInfo getVertexInfo(Field field, Object from) throws IllegalAccessException {
-        Object vertex = field.get(from);
+    private static GremlinEdgeVertexInfo getVertexInfo(Field field, Object from) {
+        Object vertex = null;
+        try {
+            vertex = field.get(from);
+        } catch (IllegalAccessException e) {
+            throw new ObjectConversionException(e);
+        }
 
         if (vertex instanceof GremlinEdgeVertexInfo) return (GremlinEdgeVertexInfo) vertex;
 
@@ -236,14 +247,18 @@ public final class ObjectToEdge {
      * @param field   the field definition to extract the value using
      * @param results the GremlinEdge being updated
      * @param from    the instance of the class to extract the values from
-     * @throws IllegalAccessException When the field is not accessible from this utility
      */
     private static void setPropertyMap(Field field,
                                        com.azure.graph.bulk.impl.model.GremlinEdge results,
-                                       Object from) throws IllegalAccessException {
+                                       Object from) {
         if (!field.isAnnotationPresent(GremlinPropertyMap.class)) return;
 
-        Object value = field.get(from);
+        Object value = null;
+        try {
+            value = field.get(from);
+        } catch (IllegalAccessException e) {
+            throw new ObjectConversionException(e);
+        }
         if (value instanceof Map) {
             //noinspection unchecked
             Map<String, Object> properties = (Map<String, Object>) value;
@@ -262,12 +277,10 @@ public final class ObjectToEdge {
      * @param field   the field definition to extract the value using
      * @param results the GremlinEdge being updated
      * @param from    the instance of the class to extract the values from
-     * @throws IllegalAccessException When the field is not accessible from this utility
      */
     private static void setPropertyValues(Field field,
                                           com.azure.graph.bulk.impl.model.GremlinEdge results,
-                                          Object from)
-            throws IllegalAccessException {
+                                          Object from) {
         if (field.isAnnotationPresent(GremlinIgnore.class) ||
                 field.isAnnotationPresent(GremlinId.class) ||
                 field.isAnnotationPresent(GremlinPartitionKey.class) ||
@@ -276,7 +289,12 @@ public final class ObjectToEdge {
                 field.isAnnotationPresent(GremlinEdgeVertex.class)
         ) return;
 
-        Object value = field.get(from);
+        Object value = null;
+        try {
+            value = field.get(from);
+        } catch (IllegalAccessException e) {
+            throw new ObjectConversionException(e);
+        }
         if (value == null) return;
 
         String key = field.getName();

@@ -4,10 +4,11 @@
 package com.azure.graph.bulk.sample;
 
 import com.azure.graph.bulk.impl.model.GremlinEdgeVertexInfo;
+import com.azure.graph.bulk.sample.model.DataGenerationException;
 import com.azure.graph.bulk.sample.model.PersonVertex;
 import com.azure.graph.bulk.sample.model.RelationshipEdge;
-import lombok.SneakyThrows;
 
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,28 +25,36 @@ public class GenerateDomainSamples {
         throw new IllegalStateException("Utility class, should not be constructed");
     }
 
-    @SneakyThrows
     public static List<PersonVertex> getVertices(int volume) {
-        SecureRandom random = SecureRandom.getInstanceStrong();
-        return IntStream.range(1, volume + 1).mapToObj(
-                        i -> generatePerson(random))
-                .collect(Collectors.toCollection(ArrayList::new));
+        try {
+            SecureRandom random = SecureRandom.getInstanceStrong();
+
+            return IntStream.range(1, volume + 1).mapToObj(
+                            i -> generatePerson(random))
+                    .collect(Collectors.toCollection(ArrayList::new));
+        } catch (NoSuchAlgorithmException e) {
+            throw new DataGenerationException(e);
+        }
     }
 
-    @SneakyThrows
     public static List<RelationshipEdge> getEdges(List<PersonVertex> vertices, int factor) {
         ArrayList<RelationshipEdge> edges = new ArrayList<>();
-        SecureRandom random = SecureRandom.getInstanceStrong();
-        for (PersonVertex vertex : vertices) {
-            int volume = random.nextInt(factor) + 1;
-            for (int i = 1; i <= volume; i++) {
+        try {
+            SecureRandom random = SecureRandom.getInstanceStrong();
 
-                edges.add(new RelationshipEdge(
-                        GremlinEdgeVertexInfo.fromGremlinVertex(vertex),
-                        getRandomVertex(random, vertex.id, vertices),
-                        SeedGenerationValues.RelationshipTypes[
-                                random.nextInt(SeedGenerationValues.RelationshipTypes.length - 1)]));
+            for (PersonVertex vertex : vertices) {
+                int volume = random.nextInt(factor) + 1;
+                for (int i = 1; i <= volume; i++) {
+
+                    edges.add(new RelationshipEdge(
+                            GremlinEdgeVertexInfo.fromGremlinVertex(vertex),
+                            getRandomVertex(random, vertex.id, vertices),
+                            SeedGenerationValues.RelationshipTypes[
+                                    random.nextInt(SeedGenerationValues.RelationshipTypes.length - 1)]));
+                }
             }
+        } catch (NoSuchAlgorithmException e) {
+            throw new DataGenerationException(e);
         }
         return edges;
     }

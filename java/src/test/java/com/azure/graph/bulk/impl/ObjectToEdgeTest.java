@@ -6,7 +6,6 @@ package com.azure.graph.bulk.impl;
 import com.azure.graph.bulk.impl.model.GremlinEdge;
 import com.azure.graph.bulk.impl.model.GremlinEdgeVertexInfo;
 import com.azure.graph.bulk.sample.model.RelationshipEdge;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -15,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ObjectToEdgeTest {
 
-    @SneakyThrows
     @Test
     void RelationshipEdgeToGremlinEdgeTest() {
         RelationshipEdge edge = getRelationshipGraphEdge();

@@ -11,7 +11,7 @@ import com.azure.graph.bulk.impl.annotations.GremlinPartitionKey;
 import com.azure.graph.bulk.impl.annotations.GremlinProperty;
 import com.azure.graph.bulk.impl.annotations.GremlinPropertyMap;
 import com.azure.graph.bulk.impl.annotations.GremlinVertex;
-import lombok.SneakyThrows;
+import com.azure.graph.bulk.impl.model.ObjectConversionException;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 
@@ -35,7 +35,6 @@ public final class ObjectToVertex {
      * @param from object to convert into a GremlinVertex
      * @return An instance of the GremlinVertex object based on the values extracted from the object provided
      */
-    @SneakyThrows
     // InvocationTargetException should never be thrown due to not being able to see methods that are not public
     public static com.azure.graph.bulk.impl.model.GremlinVertex toGremlinVertex(Object from) {
         Class<?> clazz = from.getClass();
@@ -84,7 +83,6 @@ public final class ObjectToVertex {
      * @param results the GremlinVertex being updated
      * @param from    the instance of the class to extract the values from
      */
-    @SneakyThrows
     private static void setFieldValues(Class<?> clazz, com.azure.graph.bulk.impl.model.GremlinVertex results, Object from) {
         for (Field field : FieldUtils.getAllFields(clazz)) {
             if (isStatic(field.getModifiers()) || !field.canAccess(from)) continue; // Field is not accessible
@@ -104,13 +102,14 @@ public final class ObjectToVertex {
      * @param field   the field definition to extract the value using
      * @param results the GremlinVertex being updated
      * @param from    the instance of the class to extract the values from
-     * @throws IllegalAccessException When the field is not accessible from this utility
      */
-    private static void setIdValue(Field field, com.azure.graph.bulk.impl.model.GremlinVertex results, Object from)
-            throws IllegalAccessException {
-
+    private static void setIdValue(Field field, com.azure.graph.bulk.impl.model.GremlinVertex results, Object from) {
         if (field.isAnnotationPresent(GremlinId.class)) {
-            results.setId((String) field.get(from));
+            try {
+                results.setId((String) field.get(from));
+            } catch (IllegalAccessException e) {
+                throw new ObjectConversionException(e);
+            }
 
             if (results.getId() == null) {
                 throw new IllegalArgumentException(
@@ -126,18 +125,23 @@ public final class ObjectToVertex {
      * @param field   the field definition to extract the value using
      * @param results the GremlinVertex being updated
      * @param from    the instance of the class to extract the values from
-     * @throws IllegalAccessException When the field is not accessible from this utility
      */
-    private static void setPartitionKey(Field field, com.azure.graph.bulk.impl.model.GremlinVertex results, Object from)
-            throws IllegalAccessException {
+    private static void setPartitionKey(Field field,
+                                        com.azure.graph.bulk.impl.model.GremlinVertex results,
+                                        Object from) {
         Class<GremlinPartitionKey> pkAnnotationClass = GremlinPartitionKey.class;
         if (field.isAnnotationPresent(pkAnnotationClass)) {
             GremlinPartitionKey pkAnnotation = field.getAnnotation(pkAnnotationClass);
 
             com.azure.graph.bulk.impl.model.GremlinPartitionKey pk =
-                    new com.azure.graph.bulk.impl.model.GremlinPartitionKey(
-                            pkAnnotation.fieldName().isBlank() ? field.getName() : pkAnnotation.fieldName(),
-                            (String) field.get(from));
+                    null;
+            try {
+                pk = new com.azure.graph.bulk.impl.model.GremlinPartitionKey(
+                        pkAnnotation.fieldName().isBlank() ? field.getName() : pkAnnotation.fieldName(),
+                        (String) field.get(from));
+            } catch (IllegalAccessException e) {
+                throw new ObjectConversionException(e);
+            }
 
             results.setPartitionKey(pk);
         }
@@ -150,12 +154,17 @@ public final class ObjectToVertex {
      * @param field   the field definition to extract the value using
      * @param results the GremlinVertex being updated
      * @param from    the instance of the class to extract the values from
-     * @throws IllegalAccessException When the field is not accessible from this utility
      */
-    private static void setLabel(Field field, com.azure.graph.bulk.impl.model.GremlinVertex results, Object from) throws IllegalAccessException {
+    private static void setLabel(Field field,
+                                 com.azure.graph.bulk.impl.model.GremlinVertex results,
+                                 Object from) {
         if (!field.isAnnotationPresent(GremlinLabel.class)) return;
 
-        results.setLabel((String) field.get(from));
+        try {
+            results.setLabel((String) field.get(from));
+        } catch (IllegalAccessException e) {
+            throw new ObjectConversionException(e);
+        }
     }
 
     /**
@@ -164,14 +173,20 @@ public final class ObjectToVertex {
      * @param clazz   the class of the object being used
      * @param results the GremlinVertex being updated
      * @param from    the instance of the class to extract the values from
-     * @throws InvocationTargetException When the method executed throws an exceptions
-     * @throws IllegalAccessException    Guards in place to prevent exception from being thrown
      */
-    private static void setLabelFromGetter(Class<?> clazz, com.azure.graph.bulk.impl.model.GremlinVertex results, Object from)
-            throws InvocationTargetException, IllegalAccessException {
+    private static void setLabelFromGetter(Class<?> clazz,
+                                           com.azure.graph.bulk.impl.model.GremlinVertex results,
+                                           Object from) {
         for (Method method : MethodUtils.getMethodsWithAnnotation(clazz, GremlinLabelGetter.class)) {
             if (!method.isAnnotationPresent(GremlinLabelGetter.class)) continue;
-            String vertexLabel = (String) method.invoke(from);
+
+            String vertexLabel = null;
+
+            try {
+                vertexLabel = (String) method.invoke(from);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new ObjectConversionException(e);
+            }
 
             if (!vertexLabel.isBlank()) {
                 results.setLabel(vertexLabel);
@@ -186,12 +201,19 @@ public final class ObjectToVertex {
      * @param field   the field definition to extract the value using
      * @param results the GremlinVertex being updated
      * @param from    the instance of the class to extract the values from
-     * @throws IllegalAccessException When the field is not accessible from this utility
      */
-    private static void setPropertyMap(Field field, com.azure.graph.bulk.impl.model.GremlinVertex results, Object from) throws IllegalAccessException {
+    private static void setPropertyMap(Field field,
+                                       com.azure.graph.bulk.impl.model.GremlinVertex results,
+                                       Object from) {
         if (!field.isAnnotationPresent(GremlinPropertyMap.class)) return;
 
-        Object value = field.get(from);
+        Object value = null;
+
+        try {
+            value = field.get(from);
+        } catch (IllegalAccessException e) {
+            throw new ObjectConversionException(e);
+        }
 
         if (value instanceof Map) {
             //noinspection unchecked
@@ -211,10 +233,10 @@ public final class ObjectToVertex {
      * @param field   the field definition to extract the value using
      * @param results the GremlinVertex being updated
      * @param from    the instance of the class to extract the values from
-     * @throws IllegalAccessException When the field is not accessible from this utility
      */
-    private static void setPropertyValues(Field field, com.azure.graph.bulk.impl.model.GremlinVertex results, Object from)
-            throws IllegalAccessException {
+    private static void setPropertyValues(Field field,
+                                          com.azure.graph.bulk.impl.model.GremlinVertex results,
+                                          Object from) {
         if (field.isAnnotationPresent(GremlinIgnore.class) ||
                 field.isAnnotationPresent(GremlinId.class) ||
                 field.isAnnotationPresent(GremlinPartitionKey.class) ||
@@ -222,7 +244,12 @@ public final class ObjectToVertex {
                 field.isAnnotationPresent(GremlinPropertyMap.class)
         ) return;
 
-        Object value = field.get(from);
+        Object value = null;
+        try {
+            value = field.get(from);
+        } catch (IllegalAccessException e) {
+            throw new ObjectConversionException(e);
+        }
         if (value != null) {
             String key = field.getName();
             if (field.isAnnotationPresent(GremlinProperty.class)) {

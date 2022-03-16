@@ -22,7 +22,7 @@ public class ProcessingResults {
     @JsonAutoDetect(fieldVisibility = Visibility.ANY)
     private class StateTransition {
         private String stateName;
-        private long startTime;
+        private final long startTime;
         private long endTime;
         private long durationInNanoSeconds;
         private float durationInMinutes;
@@ -72,14 +72,18 @@ public class ProcessingResults {
         this.edgeCount = edgeCount;
     }
 
-    public void end() throws JsonProcessingException {
+    public void end() {
         if (currentState != null) {
             currentState.stop();
         }
         endTime = System.nanoTime();
         durationInNanoSeconds = endTime - startTime;
         durationInMinutes = (float) durationInNanoSeconds / ProcessingResults.nanoSecondsInAMinute;
-        log.info("Processing complete. Results are: {}", this.toJsonString());
+        try {
+            log.info("Processing complete. Results are: {}", this.toJsonString());
+        } catch (JsonProcessingException e) {
+            log.error("Unable to report results due to: ", e);
+        }
     }
 
     public void failure(Exception e) {

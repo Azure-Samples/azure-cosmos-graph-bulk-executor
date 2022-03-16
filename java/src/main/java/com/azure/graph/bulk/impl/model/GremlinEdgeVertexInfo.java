@@ -8,7 +8,6 @@ import com.azure.graph.bulk.impl.annotations.GremlinPartitionKey;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.SneakyThrows;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.lang.reflect.Field;
@@ -42,7 +41,6 @@ public class GremlinEdgeVertexInfo {
      * @return GremlinEdgeVertexInfo containing all the required data to successfully create a link between the
      * Vertex and another Vertex
      */
-    @SneakyThrows
     public static GremlinEdgeVertexInfo fromGremlinVertex(Object from) {
         if (from instanceof GremlinVertex) {
             return new GremlinEdgeVertexInfo((GremlinVertex) from);
@@ -64,11 +62,19 @@ public class GremlinEdgeVertexInfo {
 
         for (Field field : FieldUtils.getAllFields(clazz)) {
             if (field.isAnnotationPresent(GremlinId.class)) {
-                result.id = (String) field.get(from);
+                try {
+                    result.id = (String) field.get(from);
+                } catch (IllegalAccessException e) {
+                    throw new ObjectConversionException(e);
+                }
             }
 
             if (field.isAnnotationPresent(GremlinPartitionKey.class)) {
-                result.partitionKey = (String) field.get(from);
+                try {
+                    result.partitionKey = (String) field.get(from);
+                } catch (IllegalAccessException e) {
+                    throw new ObjectConversionException(e);
+                }
             }
         }
         return result;

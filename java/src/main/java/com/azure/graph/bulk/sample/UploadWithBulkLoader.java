@@ -15,7 +15,6 @@ import com.azure.cosmos.models.CosmosDatabaseResponse;
 import com.azure.cosmos.models.ThroughputProperties;
 import com.azure.graph.bulk.impl.BulkGremlinObjectMapper;
 import com.azure.graph.bulk.impl.impl.CosmosDBSQLBulkExecutor;
-import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
@@ -30,7 +29,6 @@ public class UploadWithBulkLoader<V, E> {
 
     private final CosmosDBSQLBulkExecutor<V, E> executor;
 
-    @SneakyThrows
     public UploadWithBulkLoader() {
         client = new CosmosClientBuilder()
                 .endpoint(DatabaseSettings.HOST)
@@ -47,12 +45,13 @@ public class UploadWithBulkLoader<V, E> {
                 DatabaseSettings.ALLOW_UPSERT);
     }
 
-    private void createDatabaseIfNotExists() throws Exception {
+    private void createDatabaseIfNotExists() {
         log.info("Create database " + DatabaseSettings.DATABASE_NAME + " if not exists.");
 
         //  Create database if not exists
         //  <CreateDatabaseIfNotExists>
-        Mono<CosmosDatabaseResponse> databaseIfNotExists = client.createDatabaseIfNotExists(DatabaseSettings.DATABASE_NAME);
+        Mono<CosmosDatabaseResponse> databaseIfNotExists =
+                client.createDatabaseIfNotExists(DatabaseSettings.DATABASE_NAME);
         databaseIfNotExists.flatMap(databaseResponse -> {
             database = client.getDatabase(databaseResponse.getProperties().getId());
             log.info("Checking database " + database.getId() + " completed!\n");
@@ -61,7 +60,7 @@ public class UploadWithBulkLoader<V, E> {
         //  </CreateDatabaseIfNotExists>
     }
 
-    private void createContainerIfNotExists() throws Exception {
+    private void createContainerIfNotExists() {
         log.info("Create container " + DatabaseSettings.CONTAINER_NAME + " if not exists.");
 
         //  Create container if not exists

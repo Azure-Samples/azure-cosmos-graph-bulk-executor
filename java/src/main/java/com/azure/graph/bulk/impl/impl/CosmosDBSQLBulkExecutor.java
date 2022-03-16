@@ -12,10 +12,11 @@ import com.azure.cosmos.models.PartitionKey;
 import com.azure.graph.bulk.impl.GraphBulkExecutor;
 import com.azure.graph.bulk.impl.ObjectToEdge;
 import com.azure.graph.bulk.impl.ObjectToVertex;
+import com.azure.graph.bulk.impl.model.DocumentSerializationException;
 import com.azure.graph.bulk.impl.model.GremlinEdge;
 import com.azure.graph.bulk.impl.model.GremlinVertex;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
@@ -60,18 +61,20 @@ public class CosmosDBSQLBulkExecutor<V, E> implements GraphBulkExecutor<V, E> {
         });
     }
 
-    @SneakyThrows // Letting JsonProcessingException bubble up
     private CosmosItemOperation getVertexOperation(GremlinVertex vertex) {
         PartitionKey partitionKey = new PartitionKey(vertex.getPartitionKey().getValue());
+        try {
+            if (allowUpsert)
+                return CosmosBulkOperations.getUpsertItemOperation(
+                        new JsonSerializable(mapper.writeValueAsString(vertex)),
+                        partitionKey);
 
-        if (allowUpsert)
-            return CosmosBulkOperations.getUpsertItemOperation(
+            return CosmosBulkOperations.getCreateItemOperation(
                     new JsonSerializable(mapper.writeValueAsString(vertex)),
                     partitionKey);
-
-        return CosmosBulkOperations.getCreateItemOperation(
-                new JsonSerializable(mapper.writeValueAsString(vertex)),
-                partitionKey);
+        } catch (JsonProcessingException e) {
+            throw new DocumentSerializationException(e);
+        }
     }
 
     private Stream<GremlinEdge> getEdgeStream(Iterable<E> edges) {
@@ -82,17 +85,19 @@ public class CosmosDBSQLBulkExecutor<V, E> implements GraphBulkExecutor<V, E> {
         });
     }
 
-    @SneakyThrows // Letting JsonProcessingException bubble up
     private CosmosItemOperation getEdgeOperation(GremlinEdge edge) {
         PartitionKey partitionKey = new PartitionKey(edge.getPartitionKey().getValue());
+        try {
+            if (allowUpsert)
+                return CosmosBulkOperations.getUpsertItemOperation(
+                        new JsonSerializable(mapper.writeValueAsString(edge)),
+                        partitionKey);
 
-        if (allowUpsert)
-            return CosmosBulkOperations.getUpsertItemOperation(
+            return CosmosBulkOperations.getCreateItemOperation(
                     new JsonSerializable(mapper.writeValueAsString(edge)),
                     partitionKey);
-
-        return CosmosBulkOperations.getCreateItemOperation(
-                new JsonSerializable(mapper.writeValueAsString(edge)),
-                partitionKey);
+        } catch (JsonProcessingException e) {
+            throw new DocumentSerializationException(e);
+        }
     }
 }

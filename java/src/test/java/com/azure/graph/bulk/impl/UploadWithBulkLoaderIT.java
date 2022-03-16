@@ -13,13 +13,13 @@ import com.azure.graph.bulk.sample.CosmosDBGremlinExecutor;
 import com.azure.graph.bulk.sample.DatabaseSettings;
 import com.azure.graph.bulk.sample.GenerateDomainSamples;
 import com.azure.graph.bulk.sample.GremlinCluster;
+import com.azure.graph.bulk.sample.GremlinExecutionException;
 import com.azure.graph.bulk.sample.GremlinExecutor;
 import com.azure.graph.bulk.sample.GremlinResultReader;
 import com.azure.graph.bulk.sample.GremlinSource;
 import com.azure.graph.bulk.sample.UploadWithBulkLoader;
 import com.azure.graph.bulk.sample.model.PersonVertex;
 import com.azure.graph.bulk.sample.model.RelationshipEdge;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,6 @@ class UploadWithBulkLoaderIT {
 
     private CosmosClient client;
 
-    @SneakyThrows
     @BeforeEach
     @AfterEach
     void setupAndTeardown() {
@@ -53,9 +52,8 @@ class UploadWithBulkLoaderIT {
         }
     }
 
-    @SneakyThrows
     @Test
-    void UploadWithBulkLoaderTest() {
+    void UploadWithBulkLoaderTest() throws GremlinExecutionException {
         // Generate vertices and edges for testing
         List<PersonVertex> vertices = GenerateDomainSamples.getVertices(10);
         List<RelationshipEdge> edges = GenerateDomainSamples.getEdges(vertices, 5);

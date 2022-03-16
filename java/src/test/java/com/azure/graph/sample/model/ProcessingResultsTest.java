@@ -4,16 +4,15 @@
 package com.azure.graph.sample.model;
 
 import com.azure.graph.bulk.sample.model.ProcessingResults;
-import lombok.SneakyThrows;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProcessingResultsTest {
 
-    @SneakyThrows
     @Test
-    void emptySerialization() {
+    void emptySerialization() throws JsonProcessingException {
         ProcessingResults processingResults = new ProcessingResults();
         String jsonString = processingResults.toJsonString();
         assertNotNull(jsonString);
@@ -27,9 +26,8 @@ class ProcessingResultsTest {
         assertTrue(jsonString.contains("\"states\":[]"));
     }
 
-    @SneakyThrows
     @Test
-    void startingAndStopping() {
+    void startingAndStopping() throws InterruptedException, JsonProcessingException {
         ProcessingResults processingResults = new ProcessingResults();
 
         // Add some distance between start and stop
@@ -51,9 +49,8 @@ class ProcessingResultsTest {
         assertFalse(jsonString.contains("\"durationInMinutes\":0"));
     }
 
-    @SneakyThrows
     @Test
-    void settingCounts() {
+    void settingCounts() throws JsonProcessingException {
         ProcessingResults processingResults = new ProcessingResults();
         processingResults.setCounts(100, 500);
         String jsonString = processingResults.toJsonString();
@@ -65,9 +62,8 @@ class ProcessingResultsTest {
         assertTrue(jsonString.contains("\"edgeCount\":500"));
     }
 
-    @SneakyThrows
     @Test
-    void transitionState() {
+    void transitionState() throws InterruptedException, JsonProcessingException {
         ProcessingResults processingResults = new ProcessingResults();
         processingResults.setCounts(100, 500);
 
