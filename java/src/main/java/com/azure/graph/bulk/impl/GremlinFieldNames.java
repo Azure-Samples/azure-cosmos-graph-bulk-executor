@@ -7,6 +7,10 @@ package com.azure.graph.bulk.impl;
  * Defines the names of the fields on the Edge and Vertex documents sent to the CosmsoDb Graph Database
  */
 public final class GremlinFieldNames {
+    private GremlinFieldNames() {
+        throw new IllegalStateException("Utility class, should not be constructed");
+    }
+
     public static final String VERTEX_ID = "id";
     public static final String VERTEX_LABEL = "label";
 

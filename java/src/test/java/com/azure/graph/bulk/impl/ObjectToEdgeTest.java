@@ -19,30 +19,30 @@ class ObjectToEdgeTest {
         RelationshipEdge edge = getRelationshipGraphEdge();
         GremlinEdge results = ObjectToEdge.toGremlinEdge(edge);
 
-        assertEquals(edge.getDestinationVertexInfo().getId(), results.getDestinationVertexInfo().getId());
-        assertEquals(edge.getSourceVertexInfo().getId(), results.getSourceVertexInfo().getId());
-        assertEquals(edge.getDestinationVertexInfo().getPartitionKey(),
+        assertEquals(edge.destinationVertexInfo.getId(), results.getDestinationVertexInfo().getId());
+        assertEquals(edge.sourceVertexInfo.getId(), results.getSourceVertexInfo().getId());
+        assertEquals(edge.destinationVertexInfo.getPartitionKey(),
                 results.getDestinationVertexInfo().getPartitionKey());
-        assertEquals(edge.getSourceVertexInfo().getPartitionKey(), results.getSourceVertexInfo().getPartitionKey());
-        assertEquals(edge.getDestinationVertexInfo().getLabel(), results.getDestinationVertexInfo().getLabel());
-        assertEquals(edge.getSourceVertexInfo().getLabel(), results.getSourceVertexInfo().getLabel());
+        assertEquals(edge.sourceVertexInfo.getPartitionKey(), results.getSourceVertexInfo().getPartitionKey());
+        assertEquals(edge.destinationVertexInfo.getLabel(), results.getDestinationVertexInfo().getLabel());
+        assertEquals(edge.sourceVertexInfo.getLabel(), results.getSourceVertexInfo().getLabel());
 
         assertNotNull(results.getId());
 
     }
 
     private RelationshipEdge getRelationshipGraphEdge() {
-        RelationshipEdge edge = new RelationshipEdge(
-                GremlinEdgeVertexInfo.builder()
+        RelationshipEdge edge = RelationshipEdge.builder()
+                .sourceVertexInfo(GremlinEdgeVertexInfo.builder()
                         .id(UUID.randomUUID().toString())
                         .label("REL1")
-                        .partitionKey("rel1").build(),
-                GremlinEdgeVertexInfo.builder()
+                        .partitionKey("rel1").build())
+                .destinationVertexInfo(GremlinEdgeVertexInfo.builder()
                         .id(UUID.randomUUID().toString())
                         .label("REL2")
-                        .partitionKey("rel2").build(),
-                "friend"
-        );
+                        .partitionKey("rel2").build())
+                .relationshipType("friend")
+                .build();
 
         return edge;
     }

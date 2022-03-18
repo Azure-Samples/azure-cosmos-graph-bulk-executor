@@ -73,9 +73,9 @@ class UploadWithBulkLoaderIT {
 
         // Verify data upserted is equal to data read using tinkerpop
         assertEquals(vertices.size(), gremlinVertices.size());
-        assertEquals(vertices.get(0).getId(), gremlinVertices.get(0).getId());
+        assertEquals(vertices.get(0).id, gremlinVertices.get(0).getId());
         assertEquals("PERSON", gremlinVertices.get(0).getLabel());
         assertEquals("vertex", gremlinVertices.get(0).getType());
-        assertEquals(vertices.get(0).getCountry(), gremlinVertices.get(0).getProperties().get("country"));
+        assertEquals(vertices.get(0).country, gremlinVertices.get(0).getProperties().get("country"));
     }
 }

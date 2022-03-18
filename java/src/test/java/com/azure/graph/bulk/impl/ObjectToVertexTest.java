@@ -20,7 +20,7 @@ class ObjectToVertexTest {
         GremlinVertex converted = ObjectToVertex.toGremlinVertex(source);
 
         assertEquals("PERSON", converted.getLabel());
-        assertEquals(source.getId(), converted.getId());
+        assertEquals(source.id, converted.getId());
 
         validatePartitionKey(source, converted);
         assertTrue(converted.getProperties().containsKey("ElectronicMail"));

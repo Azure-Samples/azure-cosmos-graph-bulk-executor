@@ -46,11 +46,11 @@ public class GenerateDomainSamples {
                 int volume = random.nextInt(factor) + 1;
                 for (int i = 1; i <= volume; i++) {
 
-                    edges.add(new RelationshipEdge(
-                            GremlinEdgeVertexInfo.fromGremlinVertex(vertex),
-                            getRandomVertex(random, vertex.id, vertices),
-                            SeedGenerationValues.RelationshipTypes[
-                                    random.nextInt(SeedGenerationValues.RelationshipTypes.length - 1)]));
+                    edges.add(RelationshipEdge.builder()
+                            .sourceVertexInfo(GremlinEdgeVertexInfo.fromGremlinVertex(vertex))
+                            .destinationVertexInfo(getRandomVertex(random, vertex.id, vertices))
+                            .relationshipType(SeedGenerationValues.RelationshipTypes[
+                                    random.nextInt(SeedGenerationValues.RelationshipTypes.length - 1)]).build());
                 }
             }
         } catch (NoSuchAlgorithmException e) {
@@ -63,7 +63,7 @@ public class GenerateDomainSamples {
         GremlinEdgeVertexInfo vertex = null;
         while (vertex == null) {
             PersonVertex potentialVertex = vertices.get(random.nextInt(vertices.size() - 1));
-            if (!Objects.equals(potentialVertex.getId(), sourceId)) {
+            if (!Objects.equals(potentialVertex.id, sourceId)) {
                 vertex = GremlinEdgeVertexInfo.fromGremlinVertex(potentialVertex);
             }
         }
