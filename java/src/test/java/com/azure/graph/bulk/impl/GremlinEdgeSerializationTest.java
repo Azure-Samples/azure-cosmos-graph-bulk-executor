@@ -42,14 +42,14 @@ class GremlinEdgeSerializationTest {
     private GremlinEdge getGremlinEdge() {
         GremlinEdge edge = GremlinEdge.builder()
                 .id(UUID.randomUUID().toString())
-                .destinationVertexInfo(new GremlinEdgeVertexInfo(
-                        UUID.randomUUID().toString(),
-                        "in",
-                        "product"))
-                .sourceVertexInfo(new GremlinEdgeVertexInfo(
-                        UUID.randomUUID().toString(),
-                        "out",
-                        "product"))
+                .destinationVertexInfo(GremlinEdgeVertexInfo.builder()
+                        .id(UUID.randomUUID().toString())
+                        .label("in")
+                        .partitionKey("product").build())
+                .sourceVertexInfo(GremlinEdgeVertexInfo.builder()
+                        .id(UUID.randomUUID().toString())
+                        .label("out")
+                        .partitionKey("product").build())
                 .label("schema")
                 .partitionKey(new GremlinPartitionKey("classification", "product"))
                 .properties(new HashMap<>())

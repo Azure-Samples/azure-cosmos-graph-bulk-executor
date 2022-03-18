@@ -5,17 +5,11 @@ package com.azure.graph.bulk.impl.model;
 
 import com.azure.graph.bulk.impl.annotations.GremlinId;
 import com.azure.graph.bulk.impl.annotations.GremlinPartitionKey;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
 
-@Data
-@Builder
-@AllArgsConstructor
 public class GremlinEdgeVertexInfo {
     private String id;
     private String label;
@@ -101,5 +95,67 @@ public class GremlinEdgeVertexInfo {
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         return result;
+    }
+
+    public static GremlinEdgeVertexInfo.GremlinEdgeVertexInfoBuilder builder() {
+        return new GremlinEdgeVertexInfo.GremlinEdgeVertexInfoBuilder();
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public String getLabel() {
+        return this.label;
+    }
+
+    public String getPartitionKey() {
+        return this.partitionKey;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public void setPartitionKey(String partitionKey) {
+        this.partitionKey = partitionKey;
+    }
+
+    public GremlinEdgeVertexInfo(GremlinEdgeVertexInfoBuilder builder) {
+        this.id = builder.id;
+        this.label = builder.label;
+        this.partitionKey = builder.partitionKey;
+    }
+
+    public static class GremlinEdgeVertexInfoBuilder {
+        private String id;
+        private String label;
+        private String partitionKey;
+
+        GremlinEdgeVertexInfoBuilder() {
+        }
+
+        public GremlinEdgeVertexInfo.GremlinEdgeVertexInfoBuilder id(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public GremlinEdgeVertexInfo.GremlinEdgeVertexInfoBuilder label(String label) {
+            this.label = label;
+            return this;
+        }
+
+        public GremlinEdgeVertexInfo.GremlinEdgeVertexInfoBuilder partitionKey(String partitionKey) {
+            this.partitionKey = partitionKey;
+            return this;
+        }
+
+        public GremlinEdgeVertexInfo build() {
+            return new GremlinEdgeVertexInfo(this);
+        }
     }
 }

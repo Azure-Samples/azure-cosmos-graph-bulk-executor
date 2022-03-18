@@ -33,14 +33,14 @@ class ObjectToEdgeTest {
 
     private RelationshipEdge getRelationshipGraphEdge() {
         RelationshipEdge edge = new RelationshipEdge(
-                new GremlinEdgeVertexInfo(
-                        UUID.randomUUID().toString(),
-                        "REL1",
-                        "rel1"),
-                new GremlinEdgeVertexInfo(
-                        UUID.randomUUID().toString(),
-                        "REL2",
-                        "rel2"),
+                GremlinEdgeVertexInfo.builder()
+                        .id(UUID.randomUUID().toString())
+                        .label("REL1")
+                        .partitionKey("rel1").build(),
+                GremlinEdgeVertexInfo.builder()
+                        .id(UUID.randomUUID().toString())
+                        .label("REL2")
+                        .partitionKey("rel2").build(),
                 "friend"
         );
 
