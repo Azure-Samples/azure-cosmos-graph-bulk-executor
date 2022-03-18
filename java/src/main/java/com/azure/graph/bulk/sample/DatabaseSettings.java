@@ -53,9 +53,6 @@ public class DatabaseSettings {
 
     public static final int THROUGHPUT = Integer.parseInt(Properties().getProperty("sample.sql.allow.throughput"));
 
-    public static Boolean ALLOW_UPSERT =
-            Boolean.parseBoolean(Properties().getProperty("sample.sql.allow.upserts"));
-
     public static String CONTACT_POINT =
             System.getProperty("CONTACT_POINT",
                     StringUtils.defaultString(StringUtils.trimToNull(

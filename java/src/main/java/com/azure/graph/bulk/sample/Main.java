@@ -14,6 +14,7 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Main {
     private static final ProcessingResults results = new ProcessingResults();
@@ -50,7 +51,7 @@ public class Main {
 
         results.setCounts(vertices.size(), edges.size());
 
-        executeWithDomain(vertices, edges);
+        executeWithDomain(vertices.stream(), edges.stream(), cmd.hasOption(ArgNames.CREATE_DOCS));
     }
 
     private static void runPOJOSample(CommandLine cmd) {
@@ -65,7 +66,7 @@ public class Main {
 
         results.setCounts(vertices.size(), edges.size());
 
-        executeWithPOJO(vertices, edges);
+        executeWithPOJO(vertices.stream(), edges.stream(), cmd.hasOption(ArgNames.CREATE_DOCS));
     }
 
     private static Options getOptions() {
@@ -85,21 +86,30 @@ public class Main {
                 "d",
                 ArgNames.DOMAIN_SAMPLE,
                 false,
-                "Indicates if the bulk executor sample should run the sample using Domain structures. If not present, the sample will using the raw GremlinVertex and GremlinEdge POJOs. This will allow you to compare the two different implementation methods.");
+                "Indicates if the bulk executor sample should run the sample using Domain structures. If not present, the sample will use the raw GremlinVertex and GremlinEdge POJOs. This will allow you to compare the two different implementation methods.");
+        options.addOption(
+                "c",
+                ArgNames.CREATE_DOCS,
+                false,
+                "Indicates if the bulk executor sample should run the sample using create item operations. If not preset, the sample will use upsert item operations instead.");
         return options;
     }
 
-    private static void executeWithDomain(Iterable<PersonVertex> vertices, Iterable<RelationshipEdge> edges) {
+    private static void executeWithDomain(Stream<PersonVertex> vertices,
+                                          Stream<RelationshipEdge> edges,
+                                          boolean createDocs) {
         results.transitionState("Configure Database");
         UploadWithBulkLoader loader = new UploadWithBulkLoader();
         results.transitionState("Write Documents");
-        loader.uploadDocuments(vertices, edges);
+        loader.createDocuments(vertices, edges, createDocs);
     }
 
-    private static void executeWithPOJO(Iterable<GremlinVertex> vertices, Iterable<GremlinEdge> edges) {
+    private static void executeWithPOJO(Stream<GremlinVertex> vertices,
+                                        Stream<GremlinEdge> edges,
+                                        boolean createDocs) {
         results.transitionState("Configure Database");
         UploadWithBulkLoader loader = new UploadWithBulkLoader();
         results.transitionState("Write Documents");
-        loader.uploadDocuments(vertices, edges);
+        loader.createDocuments(vertices, edges, createDocs);
     }
 }

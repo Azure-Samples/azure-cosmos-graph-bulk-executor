@@ -12,12 +12,16 @@ import com.azure.cosmos.models.CosmosContainerProperties;
 import com.azure.cosmos.models.CosmosContainerRequestOptions;
 import com.azure.cosmos.models.CosmosContainerResponse;
 import com.azure.cosmos.models.CosmosDatabaseResponse;
+import com.azure.cosmos.models.CosmosItemOperation;
 import com.azure.cosmos.models.ThroughputProperties;
 import com.azure.graph.bulk.impl.BulkGremlinObjectMapper;
-import com.azure.graph.bulk.impl.impl.CosmosDBSQLBulkExecutor;
+import com.azure.graph.bulk.impl.GremlinDocumentOperationCreator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.stream.Stream;
 
 
 public class UploadWithBulkLoader {
@@ -27,7 +31,7 @@ public class UploadWithBulkLoader {
     private CosmosAsyncDatabase database;
     private CosmosAsyncContainer container;
 
-    private final CosmosDBSQLBulkExecutor executor;
+    private final GremlinDocumentOperationCreator documentOperationCreator;
 
     public UploadWithBulkLoader() {
         client = new CosmosClientBuilder()
@@ -40,10 +44,9 @@ public class UploadWithBulkLoader {
         createDatabaseIfNotExists();
         createContainerIfNotExists();
 
-        executor = CosmosDBSQLBulkExecutor.builder()
-                .container(container)
+        documentOperationCreator = GremlinDocumentOperationCreator.builder()
                 .mapper(BulkGremlinObjectMapper.getBulkGremlinObjectMapper())
-                .allowUpsert(DatabaseSettings.ALLOW_UPSERT).build();
+                .build();
     }
 
     private void createDatabaseIfNotExists() {
@@ -93,10 +96,19 @@ public class UploadWithBulkLoader {
         }).block();
     }
 
-    public void uploadDocuments(
-            Iterable vertices, Iterable edges) {
+    public void createDocuments(
+            Stream vertices, Stream edges, boolean createDocs) {
 
-        executor.execute(vertices, edges)
+        Stream<CosmosItemOperation> operations;
+        if (createDocs) {
+            operations = documentOperationCreator.getVertexCreateOperations(vertices);
+            operations = Stream.concat(operations, documentOperationCreator.getEdgeCreateOperations(edges));
+        } else {
+            operations = documentOperationCreator.getVertexUpsertOperations(vertices);
+            operations = Stream.concat(operations, documentOperationCreator.getEdgeUpsertOperations(edges));
+        }
+
+        container.executeBulkOperations(Flux.fromStream(operations))
                 .filter(r -> r.getException() != null || r.getResponse().getStatusCode() > 299)
                 .doOnNext(r -> {
                     if (r.getException() != null) {

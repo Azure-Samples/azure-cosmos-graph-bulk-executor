@@ -35,7 +35,6 @@ class UploadWithBulkLoaderIT {
     @BeforeEach
     @AfterEach
     void setupAndTeardown() {
-
         // Delete database from CosmosDB
         client = new CosmosClientBuilder()
                 .endpoint(DatabaseSettings.HOST)
@@ -60,7 +59,7 @@ class UploadWithBulkLoaderIT {
 
         // Upload
         UploadWithBulkLoader loader = new UploadWithBulkLoader();
-        loader.uploadDocuments(vertices, edges);
+        loader.createDocuments(vertices.stream(), edges.stream(), true);
 
         // Read data from CosmosDB
         GremlinResultReader gremlinResultReader = new GremlinResultReader();
