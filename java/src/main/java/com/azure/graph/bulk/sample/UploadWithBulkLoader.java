@@ -20,14 +20,14 @@ import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
 
 
-public class UploadWithBulkLoader<V, E> {
+public class UploadWithBulkLoader {
     private static final Logger log = LoggerFactory.getLogger(UploadWithBulkLoader.class);
     private final CosmosAsyncClient client;
 
     private CosmosAsyncDatabase database;
     private CosmosAsyncContainer container;
 
-    private final CosmosDBSQLBulkExecutor<V, E> executor;
+    private final CosmosDBSQLBulkExecutor executor;
 
     public UploadWithBulkLoader() {
         client = new CosmosClientBuilder()
@@ -40,7 +40,7 @@ public class UploadWithBulkLoader<V, E> {
         createDatabaseIfNotExists();
         createContainerIfNotExists();
 
-        executor = new CosmosDBSQLBulkExecutor<>(
+        executor = new CosmosDBSQLBulkExecutor(
                 container, BulkGremlinObjectMapper.getBulkGremlinObjectMapper(),
                 DatabaseSettings.ALLOW_UPSERT);
     }
@@ -93,7 +93,7 @@ public class UploadWithBulkLoader<V, E> {
     }
 
     public void uploadDocuments(
-            Iterable<V> vertices, Iterable<E> edges) {
+            Iterable vertices, Iterable edges) {
 
         executor.execute(vertices, edges)
                 .filter(r -> r.getException() != null || r.getResponse().getStatusCode() > 299)

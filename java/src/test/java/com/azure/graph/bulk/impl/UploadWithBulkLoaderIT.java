@@ -59,7 +59,7 @@ class UploadWithBulkLoaderIT {
         List<RelationshipEdge> edges = GenerateDomainSamples.getEdges(vertices, 5);
 
         // Upload
-        UploadWithBulkLoader<PersonVertex, RelationshipEdge> loader = new UploadWithBulkLoader<>();
+        UploadWithBulkLoader loader = new UploadWithBulkLoader();
         loader.uploadDocuments(vertices, edges);
 
         // Read data from CosmosDB

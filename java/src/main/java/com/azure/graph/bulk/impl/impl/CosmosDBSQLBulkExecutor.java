@@ -17,8 +17,6 @@ import com.azure.graph.bulk.impl.model.GremlinEdge;
 import com.azure.graph.bulk.impl.model.GremlinVertex;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
@@ -26,8 +24,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 
-public class CosmosDBSQLBulkExecutor<V, E> implements GraphBulkExecutor<V, E> {
-    private static final Logger log = LoggerFactory.getLogger(CosmosDBSQLBulkExecutor.class);
+public class CosmosDBSQLBulkExecutor implements GraphBulkExecutor {
     private final CosmosAsyncContainer container;
     private final ObjectMapper mapper;
     private final boolean allowUpsert;
@@ -39,8 +36,8 @@ public class CosmosDBSQLBulkExecutor<V, E> implements GraphBulkExecutor<V, E> {
         this.allowUpsert = allowUpsert;
     }
 
-    public Flux<CosmosBulkOperationResponse<GraphBulkExecutor<V, E>>> execute(
-            Iterable<V> vertices, Iterable<E> edges) {
+    public Flux<CosmosBulkOperationResponse<GraphBulkExecutor>> execute(
+            Iterable vertices, Iterable edges) {
         if (vertices == null) vertices = new ArrayList<>();
         if (edges == null) edges = new ArrayList<>();
 
@@ -51,7 +48,7 @@ public class CosmosDBSQLBulkExecutor<V, E> implements GraphBulkExecutor<V, E> {
         return container.executeBulkOperations(Flux.fromStream(allOperations));
     }
 
-    private Stream<GremlinVertex> getVertexStream(Iterable<V> vertices) {
+    private Stream<GremlinVertex> getVertexStream(Iterable vertices) {
         return StreamSupport.stream(vertices.spliterator(), true).map(v -> {
             GremlinVertex vertex = (v instanceof GremlinVertex) ?
                     (GremlinVertex) v :
@@ -77,7 +74,7 @@ public class CosmosDBSQLBulkExecutor<V, E> implements GraphBulkExecutor<V, E> {
         }
     }
 
-    private Stream<GremlinEdge> getEdgeStream(Iterable<E> edges) {
+    private Stream<GremlinEdge> getEdgeStream(Iterable edges) {
         return StreamSupport.stream(edges.spliterator(), true).map(e -> {
             GremlinEdge edge = e instanceof GremlinEdge ? (GremlinEdge) e : ObjectToEdge.toGremlinEdge(e);
             edge.validate();

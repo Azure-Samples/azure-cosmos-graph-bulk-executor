@@ -12,7 +12,7 @@ import reactor.core.publisher.Flux;
  * @param <V> Defines the class for the Vertices
  * @param <E> Defines the class for the Edges
  */
-public interface GraphBulkExecutor<V, E> {
+public interface GraphBulkExecutor {
     /**
      * Writes all vertices and edges to the data store
      *
@@ -20,6 +20,6 @@ public interface GraphBulkExecutor<V, E> {
      * @param edges    Edges to write to the data store
      * @return Results of the executions
      */
-    Flux<CosmosBulkOperationResponse<GraphBulkExecutor<V, E>>> execute(
-            Iterable<V> vertices, Iterable<E> edges);
+    Flux<CosmosBulkOperationResponse<GraphBulkExecutor>> execute(
+            Iterable vertices, Iterable edges);
 }

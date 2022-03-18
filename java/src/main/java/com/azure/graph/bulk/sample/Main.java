@@ -91,14 +91,14 @@ public class Main {
 
     private static void executeWithDomain(Iterable<PersonVertex> vertices, Iterable<RelationshipEdge> edges) {
         results.transitionState("Configure Database");
-        UploadWithBulkLoader<PersonVertex, RelationshipEdge> loader = new UploadWithBulkLoader<>();
+        UploadWithBulkLoader loader = new UploadWithBulkLoader();
         results.transitionState("Write Documents");
         loader.uploadDocuments(vertices, edges);
     }
 
     private static void executeWithPOJO(Iterable<GremlinVertex> vertices, Iterable<GremlinEdge> edges) {
         results.transitionState("Configure Database");
-        UploadWithBulkLoader<GremlinVertex, GremlinEdge> loader = new UploadWithBulkLoader<>();
+        UploadWithBulkLoader loader = new UploadWithBulkLoader();
         results.transitionState("Write Documents");
         loader.uploadDocuments(vertices, edges);
     }
