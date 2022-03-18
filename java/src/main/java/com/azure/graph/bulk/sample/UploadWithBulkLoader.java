@@ -96,7 +96,7 @@ public class UploadWithBulkLoader {
         }).block();
     }
 
-    public void createDocuments(
+    public void uploadDocuments(
             Stream vertices, Stream edges, boolean createDocs) {
 
         Stream<CosmosItemOperation> operations;

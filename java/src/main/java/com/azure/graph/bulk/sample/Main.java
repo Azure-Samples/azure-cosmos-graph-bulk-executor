@@ -101,7 +101,7 @@ public class Main {
         results.transitionState("Configure Database");
         UploadWithBulkLoader loader = new UploadWithBulkLoader();
         results.transitionState("Write Documents");
-        loader.createDocuments(vertices, edges, createDocs);
+        loader.uploadDocuments(vertices, edges, createDocs);
     }
 
     private static void executeWithPOJO(Stream<GremlinVertex> vertices,
@@ -110,6 +110,6 @@ public class Main {
         results.transitionState("Configure Database");
         UploadWithBulkLoader loader = new UploadWithBulkLoader();
         results.transitionState("Write Documents");
-        loader.createDocuments(vertices, edges, createDocs);
+        loader.uploadDocuments(vertices, edges, createDocs);
     }
 }

@@ -59,7 +59,7 @@ class UploadWithBulkLoaderIT {
 
         // Upload
         UploadWithBulkLoader loader = new UploadWithBulkLoader();
-        loader.createDocuments(vertices.stream(), edges.stream(), true);
+        loader.uploadDocuments(vertices.stream(), edges.stream(), true);
 
         // Read data from CosmosDB
         GremlinResultReader gremlinResultReader = new GremlinResultReader();
