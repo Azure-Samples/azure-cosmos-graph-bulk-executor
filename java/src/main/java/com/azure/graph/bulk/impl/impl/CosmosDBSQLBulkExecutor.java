@@ -29,11 +29,14 @@ public class CosmosDBSQLBulkExecutor implements GraphBulkExecutor {
     private final ObjectMapper mapper;
     private final boolean allowUpsert;
 
-    public CosmosDBSQLBulkExecutor(CosmosAsyncContainer container,
-                                   ObjectMapper mapper, boolean allowUpsert) {
-        this.container = container;
-        this.mapper = mapper;
-        this.allowUpsert = allowUpsert;
+    public CosmosDBSQLBulkExecutor(CosmosDBSQLBulkExecutorBuilder builder) {
+        this.container = builder.container;
+        this.mapper = builder.mapper;
+        this.allowUpsert = builder.allowUpsert;
+    }
+
+    public static CosmosDBSQLBulkExecutorBuilder builder() {
+        return new CosmosDBSQLBulkExecutorBuilder();
     }
 
     public Flux<CosmosBulkOperationResponse<GraphBulkExecutor>> execute(
@@ -97,4 +100,34 @@ public class CosmosDBSQLBulkExecutor implements GraphBulkExecutor {
             throw new DocumentSerializationException(e);
         }
     }
+
+    public static class CosmosDBSQLBulkExecutorBuilder {
+        CosmosDBSQLBulkExecutorBuilder() {
+
+        }
+
+        private CosmosAsyncContainer container;
+        private ObjectMapper mapper;
+        private boolean allowUpsert;
+
+        public CosmosDBSQLBulkExecutor.CosmosDBSQLBulkExecutorBuilder container(CosmosAsyncContainer container) {
+            this.container = container;
+            return this;
+        }
+
+        public CosmosDBSQLBulkExecutor.CosmosDBSQLBulkExecutorBuilder mapper(ObjectMapper mapper) {
+            this.mapper = mapper;
+            return this;
+        }
+
+        public CosmosDBSQLBulkExecutor.CosmosDBSQLBulkExecutorBuilder allowUpsert(boolean allowUpsert) {
+            this.allowUpsert = allowUpsert;
+            return this;
+        }
+
+        public CosmosDBSQLBulkExecutor build() {
+            return new CosmosDBSQLBulkExecutor(this);
+        }
+    }
+
 }

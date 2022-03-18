@@ -40,9 +40,10 @@ public class UploadWithBulkLoader {
         createDatabaseIfNotExists();
         createContainerIfNotExists();
 
-        executor = new CosmosDBSQLBulkExecutor(
-                container, BulkGremlinObjectMapper.getBulkGremlinObjectMapper(),
-                DatabaseSettings.ALLOW_UPSERT);
+        executor = CosmosDBSQLBulkExecutor.builder()
+                .container(container)
+                .mapper(BulkGremlinObjectMapper.getBulkGremlinObjectMapper())
+                .allowUpsert(DatabaseSettings.ALLOW_UPSERT).build();
     }
 
     private void createDatabaseIfNotExists() {
