@@ -5,24 +5,41 @@ package com.azure.graph.bulk.impl.model;
 
 public class GremlinPartitionKey {
     private final String fieldName;
-    private String value;
+    private Object value;
 
     public void validate() {
         if (fieldName == null || fieldName.isBlank())
             throw new IllegalStateException("Field name for partition key is missing");
-        if (value == null || value.isBlank()) throw new IllegalStateException("Partition key value is missing");
     }
 
     public String getFieldName() {
         return this.fieldName;
     }
 
-    public String getValue() {
+    public Object getValue() {
         return this.value;
     }
 
-    public void setValue(String value) {
+    public void setValue(Object value) {
+        if (value == null)
+            throw new IllegalStateException("Partition key cannot be set to null value");
+        if (!isValidDataType(value))
+            throw new IllegalStateException("Primary key must be a primitive data type");
         this.value = value;
+    }
+
+    private boolean isValidDataType(Object value) {
+        if (value instanceof Boolean) return true;
+        if (value instanceof String) return true;
+        if (value instanceof Integer) return true;
+        if (value instanceof Short) return true;
+        if (value instanceof Float) return true;
+        if (value instanceof Character) return true;
+        if (value instanceof Double) return true;
+        if (value instanceof Byte) return true;
+        if (value instanceof Long) return true;
+
+        return false;
     }
 
     public static GremlinPartitionKey.GremlinPartitionKeyBuilder builder() {
@@ -31,7 +48,7 @@ public class GremlinPartitionKey {
 
     public GremlinPartitionKey(GremlinPartitionKeyBuilder builder) {
         this.fieldName = builder.fieldName;
-        this.value = builder.value;
+        setValue(builder.value);
     }
 
     public boolean equals(Object o) {
@@ -54,7 +71,7 @@ public class GremlinPartitionKey {
 
     public static class GremlinPartitionKeyBuilder {
         private String fieldName;
-        private String value;
+        private Object value;
 
         GremlinPartitionKeyBuilder() {
         }
@@ -64,7 +81,7 @@ public class GremlinPartitionKey {
             return this;
         }
 
-        public GremlinPartitionKey.GremlinPartitionKeyBuilder value(String value) {
+        public GremlinPartitionKey.GremlinPartitionKeyBuilder value(Object value) {
             this.value = value;
             return this;
         }

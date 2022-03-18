@@ -184,7 +184,7 @@ public final class ObjectToEdge {
                             .fieldName(edgeAnnotation.partitionKeyFieldName().isBlank()
                                     ? field.getName()
                                     : edgeAnnotation.partitionKeyFieldName())
-                            .value(vertexInfo.getPartitionKey())
+                            .value(vertexInfo.getPartitionKey().getValue())
                             .build();
 
             results.setPartitionKey(pk);

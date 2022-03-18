@@ -134,13 +134,17 @@ public final class ObjectToVertex {
             GremlinPartitionKey pkAnnotation = field.getAnnotation(pkAnnotationClass);
 
             try {
+                Object rawObjectValue = field.get(from);
+
                 com.azure.graph.bulk.impl.model.GremlinPartitionKey pk =
                         com.azure.graph.bulk.impl.model.GremlinPartitionKey.builder()
                                 .fieldName(pkAnnotation.fieldName().isBlank()
                                         ? field.getName()
                                         : pkAnnotation.fieldName())
-                                .value((String) field.get(from)
-                                ).build();
+                                .value(rawObjectValue instanceof com.azure.graph.bulk.impl.model.GremlinPartitionKey
+                                        ? ((com.azure.graph.bulk.impl.model.GremlinPartitionKey) rawObjectValue).getValue()
+                                        : rawObjectValue)
+                                .build();
                 results.setPartitionKey(pk);
             } catch (IllegalAccessException e) {
                 throw new ObjectConversionException(e);

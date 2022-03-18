@@ -41,7 +41,7 @@ public class GremlinVertexSerializer extends StdSerializer<GremlinVertex> {
 
         GremlinPartitionKey partitionKey = gremlinVertex.getPartitionKey();
 
-        jsonGenerator.writeStringField(partitionKey.getFieldName(), partitionKey.getValue());
+        jsonGenerator.writeObjectField(partitionKey.getFieldName(), partitionKey.getValue());
 
         gremlinVertex.getProperties().forEach((key, value) -> {
             if (value != null) {

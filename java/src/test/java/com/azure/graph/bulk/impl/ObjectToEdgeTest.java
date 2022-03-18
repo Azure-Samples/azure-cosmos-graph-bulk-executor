@@ -5,6 +5,7 @@ package com.azure.graph.bulk.impl;
 
 import com.azure.graph.bulk.impl.model.GremlinEdge;
 import com.azure.graph.bulk.impl.model.GremlinEdgeVertexInfo;
+import com.azure.graph.bulk.impl.model.GremlinPartitionKey;
 import com.azure.graph.bulk.sample.model.RelationshipEdge;
 import org.junit.jupiter.api.Test;
 
@@ -36,11 +37,11 @@ class ObjectToEdgeTest {
                 .sourceVertexInfo(GremlinEdgeVertexInfo.builder()
                         .id(UUID.randomUUID().toString())
                         .label("REL1")
-                        .partitionKey("rel1").build())
+                        .partitionKey(GremlinPartitionKey.builder().value("rel1").build()).build())
                 .destinationVertexInfo(GremlinEdgeVertexInfo.builder()
                         .id(UUID.randomUUID().toString())
                         .label("REL2")
-                        .partitionKey("rel2").build())
+                        .partitionKey(GremlinPartitionKey.builder().value("rel2").build()).build())
                 .relationshipType("friend")
                 .build();
 

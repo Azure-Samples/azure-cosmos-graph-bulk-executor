@@ -4,7 +4,6 @@
 package com.azure.graph.bulk.impl.model;
 
 import com.azure.graph.bulk.impl.annotations.GremlinId;
-import com.azure.graph.bulk.impl.annotations.GremlinPartitionKey;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.lang.reflect.Field;
@@ -13,7 +12,7 @@ import java.util.Objects;
 public class GremlinEdgeVertexInfo {
     private String id;
     private String label;
-    private String partitionKey;
+    private GremlinPartitionKey partitionKey;
 
     public GremlinEdgeVertexInfo() {
     }
@@ -25,7 +24,7 @@ public class GremlinEdgeVertexInfo {
     public GremlinEdgeVertexInfo(GremlinVertex vertex) {
         id = vertex.getId();
         label = vertex.getLabel();
-        partitionKey = vertex.getPartitionKey().getValue();
+        partitionKey = vertex.getPartitionKey();
     }
 
     /**
@@ -63,9 +62,14 @@ public class GremlinEdgeVertexInfo {
                 }
             }
 
-            if (field.isAnnotationPresent(GremlinPartitionKey.class)) {
+            if (field.isAnnotationPresent(com.azure.graph.bulk.impl.annotations.GremlinPartitionKey.class)) {
                 try {
-                    result.partitionKey = (String) field.get(from);
+                    Object rawObject = field.get(from);
+                    if (rawObject instanceof GremlinPartitionKey)
+                        result.partitionKey = (GremlinPartitionKey) rawObject;
+                    else {
+                        result.partitionKey = GremlinPartitionKey.builder().value(rawObject).build();
+                    }
                 } catch (IllegalAccessException e) {
                     throw new ObjectConversionException(e);
                 }
@@ -109,7 +113,7 @@ public class GremlinEdgeVertexInfo {
         return this.label;
     }
 
-    public String getPartitionKey() {
+    public GremlinPartitionKey getPartitionKey() {
         return this.partitionKey;
     }
 
@@ -121,7 +125,7 @@ public class GremlinEdgeVertexInfo {
         this.label = label;
     }
 
-    public void setPartitionKey(String partitionKey) {
+    public void setPartitionKey(GremlinPartitionKey partitionKey) {
         this.partitionKey = partitionKey;
     }
 
@@ -134,7 +138,7 @@ public class GremlinEdgeVertexInfo {
     public static class GremlinEdgeVertexInfoBuilder {
         private String id;
         private String label;
-        private String partitionKey;
+        private GremlinPartitionKey partitionKey;
 
         GremlinEdgeVertexInfoBuilder() {
         }
@@ -149,7 +153,7 @@ public class GremlinEdgeVertexInfo {
             return this;
         }
 
-        public GremlinEdgeVertexInfo.GremlinEdgeVertexInfoBuilder partitionKey(String partitionKey) {
+        public GremlinEdgeVertexInfo.GremlinEdgeVertexInfoBuilder partitionKey(GremlinPartitionKey partitionKey) {
             this.partitionKey = partitionKey;
             return this;
         }

@@ -30,7 +30,8 @@ public class GremlinEdgeSerializer extends StdSerializer<GremlinEdge> {
      * @throws IOException When there is a IO failure writing to the jsonGenerator
      */
     @Override
-    public void serialize(GremlinEdge gremlinEdge, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+    public void serialize(GremlinEdge gremlinEdge, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)
+            throws IOException {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeBooleanField(GremlinFieldNames.EDGE_IDENTICATOR, true);
 
@@ -40,8 +41,10 @@ public class GremlinEdgeSerializer extends StdSerializer<GremlinEdge> {
         GremlinEdgeVertexInfo sourceVertexInfo = gremlinEdge.getSourceVertexInfo();
         GremlinEdgeVertexInfo destinationVertexInfo = gremlinEdge.getDestinationVertexInfo();
 
-        jsonGenerator.writeStringField(gremlinEdge.getPartitionKey().getFieldName(), gremlinEdge.getPartitionKey().getValue());
-        jsonGenerator.writeStringField(GremlinFieldNames.EDGE_DESTINATIONV_PARTITION, destinationVertexInfo.getPartitionKey());
+        jsonGenerator.writeObjectField(gremlinEdge.getPartitionKey().getFieldName(),
+                gremlinEdge.getPartitionKey().getValue());
+        jsonGenerator.writeObjectField(GremlinFieldNames.EDGE_DESTINATIONV_PARTITION,
+                destinationVertexInfo.getPartitionKey().getValue());
 
         jsonGenerator.writeStringField(GremlinFieldNames.EDGE_DESTINATIONV_ID, destinationVertexInfo.getId());
         jsonGenerator.writeStringField(GremlinFieldNames.EDGE_DESTINATIONV_LABEL, destinationVertexInfo.getLabel());
