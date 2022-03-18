@@ -3,13 +3,12 @@
 
 package com.azure.graph.bulk.sample;
 
-import lombok.experimental.Delegate;
+import org.apache.tinkerpop.gremlin.driver.Client;
 import org.apache.tinkerpop.gremlin.driver.Cluster;
 import org.apache.tinkerpop.gremlin.driver.ser.GraphSONMessageSerializerV2d0;
 
 public class GremlinCluster {
 
-    @Delegate
     private final Cluster cluster;
 
     /**
@@ -28,5 +27,9 @@ public class GremlinCluster {
                 .maxConnectionPoolSize(DatabaseSettings.MAX_CONNECTION_POOL_SIZE)
                 .maxWaitForConnection(DatabaseSettings.MAX_WAIT_FOR_CONNECTION)
                 .create();
+    }
+
+    public <T extends Client> T connect() {
+        return this.cluster.connect();
     }
 }

@@ -3,7 +3,6 @@
 
 package com.azure.graph.bulk.sample;
 
-import lombok.NonNull;
 import org.apache.tinkerpop.gremlin.driver.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +61,9 @@ public class GremlinResultReader {
      * @param value
      * @return Object
      */
-    private Object readProperty(@NonNull Object value) {
+    private Object readProperty(Object value) {
+        if (value == null)
+            throw new NullPointerException("Value is not nullable");
         if (value instanceof String) {
             return value;
         }
