@@ -15,7 +15,6 @@ import org.apache.commons.cli.Options;
 
 import java.util.List;
 
-
 public class Main {
     private static final ProcessingResults results = new ProcessingResults();
 
