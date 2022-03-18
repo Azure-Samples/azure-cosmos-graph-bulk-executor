@@ -19,7 +19,7 @@ public final class GremlinFieldNames {
 
     public static final String EDGE_LABEL = "label";
     public static final String EDGE_ID = "id";
-    public static final String EDGE_DESTINATIONV = "_sink";
+    public static final String EDGE_DESTINATIONV_ID = "_sink";
     public static final String EDGE_DESTINATIONV_LABEL = "_sinkLabel";
     public static final String EDGE_DESTINATIONV_PARTITION = "_sinkPartition";
 

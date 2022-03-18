@@ -43,7 +43,7 @@ public class GremlinEdgeSerializer extends StdSerializer<GremlinEdge> {
         jsonGenerator.writeStringField(gremlinEdge.getPartitionKey().getFieldName(), gremlinEdge.getPartitionKey().getValue());
         jsonGenerator.writeStringField(GremlinFieldNames.EDGE_DESTINATIONV_PARTITION, destinationVertexInfo.getPartitionKey());
 
-        jsonGenerator.writeStringField(GremlinFieldNames.EDGE_DESTINATIONV, destinationVertexInfo.getId());
+        jsonGenerator.writeStringField(GremlinFieldNames.EDGE_DESTINATIONV_ID, destinationVertexInfo.getId());
         jsonGenerator.writeStringField(GremlinFieldNames.EDGE_DESTINATIONV_LABEL, destinationVertexInfo.getLabel());
 
         jsonGenerator.writeStringField(GremlinFieldNames.EDGE_SOURCEV_ID, sourceVertexInfo.getId());
