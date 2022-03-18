@@ -51,7 +51,7 @@ class GremlinEdgeSerializationTest {
                         .label("out")
                         .partitionKey("product").build())
                 .label("schema")
-                .partitionKey(new GremlinPartitionKey("classification", "product"))
+                .partitionKey(GremlinPartitionKey.builder().fieldName("classification").value("product").build())
                 .properties(new HashMap<>())
                 .build();
 

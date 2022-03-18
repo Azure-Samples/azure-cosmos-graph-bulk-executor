@@ -11,7 +11,7 @@ class GremlinVertexTest {
         GremlinVertex vertex = GremlinVertex.builder()
                 .id("Good")
                 .label("Vertex")
-                .partitionKey(new GremlinPartitionKey("Field", "Value"))
+                .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
                 .build();
 
         assertDoesNotThrow(vertex::validate);
@@ -22,7 +22,7 @@ class GremlinVertexTest {
         GremlinVertex vertex = GremlinVertex.builder()
                 .id("")
                 .label("Vertex")
-                .partitionKey(new GremlinPartitionKey("Field", "Value"))
+                .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
                 .build();
 
         assertThrows(IllegalStateException.class, vertex::validate);
@@ -32,7 +32,7 @@ class GremlinVertexTest {
     void NullIdThrowsException() {
         GremlinVertex vertex = GremlinVertex.builder()
                 .label("Vertex")
-                .partitionKey(new GremlinPartitionKey("Field", "Value"))
+                .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
                 .build();
 
         assertThrows(IllegalStateException.class, vertex::validate);
@@ -43,7 +43,7 @@ class GremlinVertexTest {
         GremlinVertex vertex = GremlinVertex.builder()
                 .id("Bad")
                 .label("")
-                .partitionKey(new GremlinPartitionKey("Field", "Value"))
+                .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
                 .build();
 
         assertThrows(IllegalStateException.class, vertex::validate);
@@ -53,12 +53,11 @@ class GremlinVertexTest {
     void NullLabelThrowsException() {
         GremlinVertex vertex = GremlinVertex.builder()
                 .id("Bad")
-                .partitionKey(new GremlinPartitionKey("Field", "Value"))
+                .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
                 .build();
 
         assertThrows(IllegalStateException.class, vertex::validate);
     }
-
 
     @Test
     void NullPartitionKeyThrowsException() {

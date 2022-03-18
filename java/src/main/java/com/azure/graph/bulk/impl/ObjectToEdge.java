@@ -180,11 +180,12 @@ public final class ObjectToEdge {
             GremlinEdgeVertexInfo vertexInfo = getVertexInfo(field, from);
 
             com.azure.graph.bulk.impl.model.GremlinPartitionKey pk =
-                    new com.azure.graph.bulk.impl.model.GremlinPartitionKey(
-                            edgeAnnotation.partitionKeyFieldName().isBlank() ? field.getName() :
-                                    edgeAnnotation.partitionKeyFieldName(),
-                            vertexInfo.getPartitionKey()
-                    );
+                    com.azure.graph.bulk.impl.model.GremlinPartitionKey.builder()
+                            .fieldName(edgeAnnotation.partitionKeyFieldName().isBlank()
+                                    ? field.getName()
+                                    : edgeAnnotation.partitionKeyFieldName())
+                            .value(vertexInfo.getPartitionKey())
+                            .build();
 
             results.setPartitionKey(pk);
             results.setSourceVertexInfo(vertexInfo);
@@ -204,7 +205,7 @@ public final class ObjectToEdge {
                                                    Object from) {
         if (field.isAnnotationPresent(GremlinEdgeVertex.class)
                 && field.getAnnotation(GremlinEdgeVertex.class).Direction() == Direction.DESTINATION) {
-            
+
             GremlinEdgeVertexInfo vertexInfo = getVertexInfo(field, from);
 
             results.setDestinationVertexInfo(vertexInfo);

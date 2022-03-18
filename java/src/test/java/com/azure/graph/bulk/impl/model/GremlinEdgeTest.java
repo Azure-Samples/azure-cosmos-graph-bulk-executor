@@ -11,7 +11,7 @@ class GremlinEdgeTest {
         GremlinEdge edge = GremlinEdge.builder()
                 .id("Good")
                 .label("Edge")
-                .partitionKey(new GremlinPartitionKey("Field", "Value"))
+                .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
                 .sourceVertexInfo(new GremlinEdgeVertexInfo("Source"))
                 .destinationVertexInfo(new GremlinEdgeVertexInfo("Destination"))
                 .build();
@@ -24,7 +24,7 @@ class GremlinEdgeTest {
         GremlinEdge edge = GremlinEdge.builder()
                 .id("")
                 .label("Edge")
-                .partitionKey(new GremlinPartitionKey("Field", "Value"))
+                .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
                 .sourceVertexInfo(new GremlinEdgeVertexInfo("Source"))
                 .destinationVertexInfo(new GremlinEdgeVertexInfo("Destination"))
                 .build();
@@ -36,7 +36,7 @@ class GremlinEdgeTest {
     void NullIdThrowsException() {
         GremlinEdge edge = GremlinEdge.builder()
                 .label("Edge")
-                .partitionKey(new GremlinPartitionKey("Field", "Value"))
+                .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
                 .sourceVertexInfo(new GremlinEdgeVertexInfo("Source"))
                 .destinationVertexInfo(new GremlinEdgeVertexInfo("Destination"))
                 .build();
@@ -49,7 +49,7 @@ class GremlinEdgeTest {
         GremlinEdge edge = GremlinEdge.builder()
                 .id("Bad")
                 .label("")
-                .partitionKey(new GremlinPartitionKey("Field", "Value"))
+                .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
                 .sourceVertexInfo(new GremlinEdgeVertexInfo("Source"))
                 .destinationVertexInfo(new GremlinEdgeVertexInfo("Destination"))
                 .build();
@@ -61,7 +61,7 @@ class GremlinEdgeTest {
     void NullLabelThrowsException() {
         GremlinEdge edge = GremlinEdge.builder()
                 .id("Bad")
-                .partitionKey(new GremlinPartitionKey("Field", "Value"))
+                .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
                 .sourceVertexInfo(new GremlinEdgeVertexInfo("Source"))
                 .destinationVertexInfo(new GremlinEdgeVertexInfo("Destination"))
                 .build();
@@ -75,7 +75,7 @@ class GremlinEdgeTest {
                 .id("Bad")
                 .label("Edge")
                 .destinationVertexInfo(new GremlinEdgeVertexInfo("Destination"))
-                .partitionKey(new GremlinPartitionKey("Field", "Value"))
+                .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
                 .build();
 
         assertThrows(IllegalStateException.class, edge::validate);
@@ -87,7 +87,7 @@ class GremlinEdgeTest {
                 .id("Bad")
                 .label("Edge")
                 .sourceVertexInfo(new GremlinEdgeVertexInfo("Source"))
-                .partitionKey(new GremlinPartitionKey("Field", "Value"))
+                .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
                 .build();
 
         assertThrows(IllegalStateException.class, edge::validate);

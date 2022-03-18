@@ -26,7 +26,10 @@ public class GremlinVertex {
         if (value == null) return;
 
         if (isPartitionKey) {
-            partitionKey = new GremlinPartitionKey(key, value.toString());
+            partitionKey = GremlinPartitionKey.builder()
+                    .fieldName(key)
+                    .value(value.toString())
+                    .build();
         } else {
             properties.put(key, value);
         }

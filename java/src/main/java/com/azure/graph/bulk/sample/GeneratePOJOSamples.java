@@ -90,7 +90,7 @@ public class GeneratePOJOSamples {
                 .id(UUID.randomUUID().toString())
                 .label("PERSON")
                 .properties(new HashMap<>())
-                .partitionKey(new GremlinPartitionKey("country", country))
+                .partitionKey(GremlinPartitionKey.builder().fieldName("country").value(country).build())
                 .build();
 
         vertex.addProperty("firstName", firstName);
