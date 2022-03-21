@@ -39,8 +39,6 @@ From left to right the steps in the process are as follows:
 * Use the output of the serialized object to construct a CosmosItemOperation, either as an Upsert or Insert operation depending on the configuration.
 * Join the collection of GremlinVertices and GremlinEdges into a single stream to be fed to the Bulk operation in the Cosmos Db SDK.
 
-> TODO: Validate that the sequence (Vertices than Edges) is actually import to the flow, or is that was adopted due to the Tinkerpop implementations requirements.
-
 ## Domain Flow
 
 This flow allows for a retrofit of an existing library with the GraphBulkExecutor. It does this by providing a series of Java Annotations to decorate your Domain class definitions with to allow for the transformation into either the GremlinVertex or GremlinEdge object.
