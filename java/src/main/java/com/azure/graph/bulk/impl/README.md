@@ -14,8 +14,23 @@ There are two ways to harness that functionality. The first requires you to have
 
 This flow requires the use of the GremlinVertex and GremlinEdge class definitions directly. The benefit is that there is one less step in the flow to getting the bulk data loaded. Requiring both less memory and compute to accomplish the job. The down side is that it tightly couples your class domain structure to the GremlinVertex and GremlinEdge implementation.
 
-![POJO Flow](../../../../../../../../docs/images/POJO_FLOW.png)
-> Fig 1: POJO Flow
+```mermaid
+flowchart LR
+    GremlinVertex --> gnds[Graph Node <br />Document Structure]
+    gnds --> cinc[Cosmos Item <br />Operation Collection]
+    cinc --> fic[Complete Item <br />Operation Collection]
+
+    GremlinEdge --> geds[Graph Edge <br />Document Structure]
+    geds --> ciec[Cosmos Item <br />Operation Collection]
+    ciec --> fic
+
+    classDef vertex fill:#1f6e27,color:#dff5e1,stroke:#0d1f15;
+    classDef edge fill:#7e9ec2,color:#cedef0,stroke:#072129;
+    classDef combined fill:#34998f,color:#c6f7f2,stroke:#132422;
+    class dvm1,dvm2,dvm3,GremlinVertex,gnds,cinc vertex
+    class dem1,dem2,dem3,GremlinEdge,geds,ciec edge
+    class fic combined
+```
 
 From left to right the steps in the process are as follows:
 
@@ -30,8 +45,29 @@ From left to right the steps in the process are as follows:
 
 This flow allows for a retrofit of an existing library with the GraphBulkExecutor. It does this by providing a series of Java Annotations to decorate your Domain class definitions with to allow for the transformation into either the GremlinVertex or GremlinEdge object.
 
-![Domain Flow](../../../../../../../../docs/images/DOMAIN_FLOW.png)
-> Fig 2: Domain Flow
+```mermaid
+flowchart LR
+    dvm1[Domain Vertex <br />Model] --> GremlinVertex
+    dvm2[Domain Vertex <br />Model] --> GremlinVertex
+    dvm3[Domain Vertex <br />Model] --> GremlinVertex
+    GremlinVertex --> gnds[Graph Node <br />Document Structure]
+    gnds --> cinc[Cosmos Item <br />Operation Collection]
+    cinc --> fic[Complete Item <br />Operation Collection]
+
+    dem1[Domain Edge <br />Model] --> GremlinEdge
+    dem2[Domain Edge <br />Model] --> GremlinEdge
+    dem3[Domain Edge <br />Model] --> GremlinEdge
+    GremlinEdge --> geds[Graph Edge <br />Document Structure]
+    geds --> ciec[Cosmos Item <br />Operation Collection]
+    ciec --> fic
+
+    classDef vertex fill:#1f6e27,color:#dff5e1,stroke:#0d1f15;
+    classDef edge fill:#7e9ec2,color:#cedef0,stroke:#072129;
+    classDef combined fill:#34998f,color:#c6f7f2,stroke:#132422;
+    class dvm1,dvm2,dvm3,GremlinVertex,gnds,cinc vertex
+    class dem1,dem2,dem3,GremlinEdge,geds,ciec edge
+    class fic combined
+```
 
 Once the Domain objects have been converted into either a GremlinVertex or GremlinEdge, the flow is identical. The conversion is done by using reflection on the class definition of the Domain objects to extract the data based on the presence of the appropriate annotations.
 
