@@ -8,15 +8,14 @@ import com.azure.cosmos.CosmosClient;
 import com.azure.cosmos.CosmosClientBuilder;
 import com.azure.cosmos.CosmosException;
 import com.azure.cosmos.models.CosmosDatabaseRequestOptions;
-import com.azure.cosmos.models.CosmosDatabaseResponse;
-import com.azure.graph.bulk.sample.CosmosDBGremlinExecutor;
+import com.azure.graph.bulk.impl.tinkerpop.CosmosDBGremlinExecutor;
+import com.azure.graph.bulk.impl.tinkerpop.GremlinCluster;
+import com.azure.graph.bulk.impl.tinkerpop.GremlinExecutionException;
+import com.azure.graph.bulk.impl.tinkerpop.GremlinExecutor;
+import com.azure.graph.bulk.impl.tinkerpop.GremlinResultReader;
+import com.azure.graph.bulk.impl.tinkerpop.GremlinSource;
 import com.azure.graph.bulk.sample.DatabaseSettings;
 import com.azure.graph.bulk.sample.GenerateDomainSamples;
-import com.azure.graph.bulk.sample.GremlinCluster;
-import com.azure.graph.bulk.sample.GremlinExecutionException;
-import com.azure.graph.bulk.sample.GremlinExecutor;
-import com.azure.graph.bulk.sample.GremlinResultReader;
-import com.azure.graph.bulk.sample.GremlinSource;
 import com.azure.graph.bulk.sample.UploadWithBulkLoader;
 import com.azure.graph.bulk.sample.model.PersonVertex;
 import com.azure.graph.bulk.sample.model.RelationshipEdge;
@@ -30,13 +29,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UploadWithBulkLoaderIT {
 
-    private CosmosClient client;
-
     @BeforeEach
     @AfterEach
     void setupAndTeardown() {
         // Delete database from CosmosDB
-        client = new CosmosClientBuilder()
+        CosmosClient client = new CosmosClientBuilder()
                 .endpoint(DatabaseSettings.HOST)
                 .key(DatabaseSettings.MASTER_KEY)
                 .contentResponseOnWriteEnabled(true)
@@ -45,8 +42,7 @@ class UploadWithBulkLoaderIT {
 
         // Delete database
         try {
-            CosmosDatabaseResponse dbResp =
-                    client.getDatabase(DatabaseSettings.DATABASE_NAME).delete(new CosmosDatabaseRequestOptions());
+            client.getDatabase(DatabaseSettings.DATABASE_NAME).delete(new CosmosDatabaseRequestOptions());
         } catch (CosmosException e) {
         }
     }

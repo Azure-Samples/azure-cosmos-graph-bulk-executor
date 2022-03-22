@@ -91,6 +91,7 @@ public class GremlinVertex {
         if (isNotEqual(id, other.id)) return false;
         if (isNotEqual(label, other.label)) return false;
         if (isNotEqual(partitionKey, other.partitionKey)) return false;
+        //noinspection RedundantIfStatement
         if (isNotEqual(properties, other.properties)) return false;
 
         return true;

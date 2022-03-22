@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-package com.azure.graph.bulk.sample;
+package com.azure.graph.bulk.impl.tinkerpop;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -74,6 +74,7 @@ public class GremlinSource {
         if (isNotEqual(id, other.id)) return false;
         if (isNotEqual(label, other.label)) return false;
         if (isNotEqual(type, other.type)) return false;
+        //noinspection RedundantIfStatement
         if (isNotEqual(properties, other.properties)) return false;
 
         return true;

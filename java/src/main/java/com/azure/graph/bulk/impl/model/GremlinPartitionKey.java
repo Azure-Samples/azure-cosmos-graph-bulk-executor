@@ -37,6 +37,7 @@ public class GremlinPartitionKey {
         if (value instanceof Character) return true;
         if (value instanceof Double) return true;
         if (value instanceof Byte) return true;
+        //noinspection RedundantIfStatement
         if (value instanceof Long) return true;
 
         return false;
@@ -58,6 +59,7 @@ public class GremlinPartitionKey {
         GremlinPartitionKey other = (GremlinPartitionKey) o;
 
         if (isNotEqual(fieldName, other.fieldName)) return false;
+        //noinspection RedundantIfStatement
         if (isNotEqual(value, other.value)) return false;
 
         return true;

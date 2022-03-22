@@ -26,7 +26,7 @@ public class GremlinDocumentOperationCreator {
         return new GremlinDocumentCreatorBuilder();
     }
 
-    public Stream<CosmosItemOperation> getVertexCreateOperations(Stream vertices) {
+    public Stream<CosmosItemOperation> getVertexCreateOperations(Stream<Object> vertices) {
         return vertices.map(v -> {
             GremlinVertex vertex = (v instanceof GremlinVertex) ?
                     (GremlinVertex) v :
@@ -36,7 +36,7 @@ public class GremlinDocumentOperationCreator {
         });
     }
 
-    public Stream<CosmosItemOperation> getVertexUpsertOperations(Stream vertices) {
+    public Stream<CosmosItemOperation> getVertexUpsertOperations(Stream<Object> vertices) {
         return vertices.map(v -> {
             GremlinVertex vertex = (v instanceof GremlinVertex) ?
                     (GremlinVertex) v :
@@ -68,7 +68,7 @@ public class GremlinDocumentOperationCreator {
         }
     }
 
-    public Stream<CosmosItemOperation> getEdgeCreateOperations(Stream edges) {
+    public Stream<CosmosItemOperation> getEdgeCreateOperations(Stream<Object> edges) {
         return edges.map(e -> {
             GremlinEdge edge = e instanceof GremlinEdge ? (GremlinEdge) e : ObjectToEdge.toGremlinEdge(e);
             edge.validate();
@@ -76,7 +76,7 @@ public class GremlinDocumentOperationCreator {
         });
     }
 
-    public Stream<CosmosItemOperation> getEdgeUpsertOperations(Stream edges) {
+    public Stream<CosmosItemOperation> getEdgeUpsertOperations(Stream<Object> edges) {
         return edges.map(e -> {
             GremlinEdge edge = e instanceof GremlinEdge ? (GremlinEdge) e : ObjectToEdge.toGremlinEdge(e);
             edge.validate();

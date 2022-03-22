@@ -119,6 +119,7 @@ public class GremlinEdge {
         if (isNotEqual(destinationVertexInfo, other.destinationVertexInfo)) return false;
         if (isNotEqual(sourceVertexInfo, other.sourceVertexInfo)) return false;
         if (isNotEqual(partitionKey, other.partitionKey)) return false;
+        //noinspection RedundantIfStatement
         if (isNotEqual(properties, other.properties)) return false;
 
         return true;

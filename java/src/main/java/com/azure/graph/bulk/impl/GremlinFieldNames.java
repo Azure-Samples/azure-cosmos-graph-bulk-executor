@@ -4,7 +4,7 @@
 package com.azure.graph.bulk.impl;
 
 /**
- * Defines the names of the fields on the Edge and Vertex documents sent to the CosmsoDb Graph Database
+ * Defines the names of the fields on the Edge and Vertex documents sent to the CosmosDb Graph Database
  */
 public final class GremlinFieldNames {
     private GremlinFieldNames() {

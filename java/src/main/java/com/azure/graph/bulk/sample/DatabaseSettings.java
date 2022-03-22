@@ -10,7 +10,11 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class DatabaseSettings {
-    private static Properties Properties() {
+    private DatabaseSettings() {
+        throw new IllegalStateException("Utility class, should not be constructed");
+    }
+
+    private static Properties properties() {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         Properties properties = new Properties();
         try (InputStream resourceStream = loader.getResourceAsStream("application.properties")) {
@@ -21,65 +25,65 @@ public class DatabaseSettings {
         return properties;
     }
 
-    public static String MASTER_KEY =
+    public static final String MASTER_KEY =
             System.getProperty("ACCOUNT_KEY",
                     StringUtils.defaultString(StringUtils.trimToNull(
                                     System.getenv().get("ACCOUNT_KEY")),
-                            Properties().getProperty("sample.sql.key")));
+                            properties().getProperty("sample.sql.key")));
 
-    public static String HOST =
+    public static final String HOST =
             System.getProperty("ACCOUNT_HOST",
                     StringUtils.defaultString(StringUtils.trimToNull(
                                     System.getenv().get("ACCOUNT_HOST")),
-                            Properties().getProperty("sample.sql.host")));
+                            properties().getProperty("sample.sql.host")));
 
-    public static String DATABASE_NAME =
+    public static final String DATABASE_NAME =
             System.getProperty("DATABASE_NAME",
                     StringUtils.defaultString(StringUtils.trimToNull(
                                     System.getenv().get("DATABASE_NAME")),
-                            Properties().getProperty("sample.sql.database.name")));
+                            properties().getProperty("sample.sql.database.name")));
 
-    public static String CONTAINER_NAME =
+    public static final String CONTAINER_NAME =
             System.getProperty("CONTAINER_NAME",
                     StringUtils.defaultString(StringUtils.trimToNull(
                                     System.getenv().get("CONTAINER_NAME")),
-                            Properties().getProperty("sample.sql.container.name")));
+                            properties().getProperty("sample.sql.container.name")));
 
-    public static String PARTITION_KEY_PATH =
+    public static final String PARTITION_KEY_PATH =
             System.getProperty("PARTITION_KEY_PATH",
                     StringUtils.defaultString(StringUtils.trimToNull(
                                     System.getenv().get("PARTITION_KEY_PATH")),
-                            Properties().getProperty("sample.sql.partition.path")));
+                            properties().getProperty("sample.sql.partition.path")));
 
-    public static final int THROUGHPUT = Integer.parseInt(Properties().getProperty("sample.sql.allow.throughput"));
+    public static final int THROUGHPUT = Integer.parseInt(properties().getProperty("sample.sql.allow.throughput"));
 
-    public static String CONTACT_POINT =
+    public static final String CONTACT_POINT =
             System.getProperty("CONTACT_POINT",
                     StringUtils.defaultString(StringUtils.trimToNull(
                                     System.getenv().get("CONTACT_POINT")),
-                            Properties().getProperty("sample.gremlin.contactPoint")));
+                            properties().getProperty("sample.gremlin.contactPoint")));
 
-    public static int PORT =
+    public static final int PORT =
             Integer.parseInt(System.getProperty("PORT",
                     StringUtils.defaultString(StringUtils.trimToNull(
                                     System.getenv().get("PORT")),
-                            Properties().getProperty("sample.gremlin.port"))));
+                            properties().getProperty("sample.gremlin.port"))));
 
-    public static boolean SSL_ENABLED =
+    public static final boolean SSL_ENABLED =
             Boolean.parseBoolean(System.getProperty("SSL_ENABLED",
                     StringUtils.defaultString(StringUtils.trimToNull(
                                     System.getenv().get("SSL_ENABLED")),
-                            Properties().getProperty("sample.gremlin.sslEnabled"))));
+                            properties().getProperty("sample.gremlin.sslEnabled"))));
 
-    public static int MAX_CONNECTION_POOL_SIZE =
+    public static final int MAX_CONNECTION_POOL_SIZE =
             Integer.parseInt(System.getProperty("MAX_CONNECTION_POOL_SIZE",
                     StringUtils.defaultString(StringUtils.trimToNull(
                                     System.getenv().get("MAX_CONNECTION_POOL_SIZE")),
-                            Properties().getProperty("sample.gremlin.maxConnectionPoolSize"))));
+                            properties().getProperty("sample.gremlin.maxConnectionPoolSize"))));
 
-    public static int MAX_WAIT_FOR_CONNECTION =
+    public static final int MAX_WAIT_FOR_CONNECTION =
             Integer.parseInt(System.getProperty("MAX_WAIT_FOR_CONNECTION",
                     StringUtils.defaultString(StringUtils.trimToNull(
                                     System.getenv().get("MAX_WAIT_FOR_CONNECTION")),
-                            Properties().getProperty("sample.gremlin.maxWaitForConnection"))));
+                            properties().getProperty("sample.gremlin.maxWaitForConnection"))));
 }

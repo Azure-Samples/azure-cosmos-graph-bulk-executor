@@ -185,7 +185,7 @@ public final class ObjectToVertex {
         for (Method method : MethodUtils.getMethodsWithAnnotation(clazz, GremlinLabelGetter.class)) {
             if (!method.isAnnotationPresent(GremlinLabelGetter.class)) continue;
 
-            String vertexLabel = null;
+            String vertexLabel;
 
             try {
                 vertexLabel = (String) method.invoke(from);
@@ -212,7 +212,7 @@ public final class ObjectToVertex {
                                        Object from) {
         if (!field.isAnnotationPresent(GremlinPropertyMap.class)) return;
 
-        Object value = null;
+        Object value;
 
         try {
             value = field.get(from);
@@ -249,7 +249,7 @@ public final class ObjectToVertex {
                 field.isAnnotationPresent(GremlinPropertyMap.class)
         ) return;
 
-        Object value = null;
+        Object value;
         try {
             value = field.get(from);
         } catch (IllegalAccessException e) {

@@ -76,7 +76,7 @@ public final class ObjectToEdge {
         for (Method method : MethodUtils.getMethodsWithAnnotation(clazz, GremlinLabelGetter.class)) {
             if (isStatic(method.getModifiers()) || !method.canAccess(from))
                 continue; // method is not accessible, attempts to call it will fail.
-            String edgeLabel = null;
+            String edgeLabel;
 
             try {
                 edgeLabel = (String) method.invoke(from);
@@ -173,7 +173,7 @@ public final class ObjectToEdge {
                                               com.azure.graph.bulk.impl.model.GremlinEdge results,
                                               Object from) {
         if (field.isAnnotationPresent(GremlinEdgeVertex.class)
-                && field.getAnnotation(GremlinEdgeVertex.class).Direction() == Direction.SOURCE) {
+                && field.getAnnotation(GremlinEdgeVertex.class).direction() == Direction.SOURCE) {
             Class<GremlinEdge> annotationClass = GremlinEdge.class;
             GremlinEdge edgeAnnotation = clazz.getAnnotation(annotationClass);
 
@@ -204,7 +204,7 @@ public final class ObjectToEdge {
                                                    com.azure.graph.bulk.impl.model.GremlinEdge results,
                                                    Object from) {
         if (field.isAnnotationPresent(GremlinEdgeVertex.class)
-                && field.getAnnotation(GremlinEdgeVertex.class).Direction() == Direction.DESTINATION) {
+                && field.getAnnotation(GremlinEdgeVertex.class).direction() == Direction.DESTINATION) {
 
             GremlinEdgeVertexInfo vertexInfo = getVertexInfo(field, from);
 
@@ -222,7 +222,7 @@ public final class ObjectToEdge {
      * @return the extracted GremlinEdgeVertexInfo values
      */
     private static GremlinEdgeVertexInfo getVertexInfo(Field field, Object from) {
-        Object vertex = null;
+        Object vertex;
         try {
             vertex = field.get(from);
         } catch (IllegalAccessException e) {
@@ -254,7 +254,7 @@ public final class ObjectToEdge {
                                        Object from) {
         if (!field.isAnnotationPresent(GremlinPropertyMap.class)) return;
 
-        Object value = null;
+        Object value;
         try {
             value = field.get(from);
         } catch (IllegalAccessException e) {
@@ -290,7 +290,7 @@ public final class ObjectToEdge {
                 field.isAnnotationPresent(GremlinEdgeVertex.class)
         ) return;
 
-        Object value = null;
+        Object value;
         try {
             value = field.get(from);
         } catch (IllegalAccessException e) {

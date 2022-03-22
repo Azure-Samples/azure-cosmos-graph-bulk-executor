@@ -46,6 +46,7 @@ public class PersonVertex {
         if (isNotEqual(firstName, other.firstName)) return false;
         if (isNotEqual(lastName, other.lastName)) return false;
         if (isNotEqual(email, other.email)) return false;
+        //noinspection RedundantIfStatement
         if (isNotEqual(country, other.country)) return false;
 
         return true;

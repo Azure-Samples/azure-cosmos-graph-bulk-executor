@@ -23,7 +23,7 @@ public @interface GremlinEdgeVertex {
     /**
      * Defines which side of the edge the vertex represents, the Source Vertex or the Destination Vertex
      *
-     * @return Value indictaing if the vertex is either source or destination
+     * @return Value indicating if the vertex is either source or destination
      */
-    Direction Direction();
+    Direction direction();
 }

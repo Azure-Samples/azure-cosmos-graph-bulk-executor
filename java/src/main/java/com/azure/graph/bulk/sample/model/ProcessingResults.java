@@ -17,11 +17,11 @@ import java.util.ArrayList;
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class ProcessingResults {
     private static final Logger log = LoggerFactory.getLogger(ProcessingResults.class);
-    private final static long nanoSecondsInAMinute = 60000000000l;
+    private static final long NANOSECONDS_IN_MINUTE = 60000000000l;
 
     @JsonAutoDetect(fieldVisibility = Visibility.ANY)
     private class StateTransition {
-        private String stateName;
+        private final String stateName;
         private final long startTime;
         private long endTime;
         private long durationInNanoSeconds;
@@ -35,7 +35,7 @@ public class ProcessingResults {
         public void stop() {
             endTime = System.nanoTime();
             durationInNanoSeconds = endTime - startTime;
-            durationInMinutes = (float) durationInNanoSeconds / ProcessingResults.nanoSecondsInAMinute;
+            durationInMinutes = (float) durationInNanoSeconds / ProcessingResults.NANOSECONDS_IN_MINUTE;
         }
     }
 
@@ -78,7 +78,7 @@ public class ProcessingResults {
         }
         endTime = System.nanoTime();
         durationInNanoSeconds = endTime - startTime;
-        durationInMinutes = (float) durationInNanoSeconds / ProcessingResults.nanoSecondsInAMinute;
+        durationInMinutes = (float) durationInNanoSeconds / ProcessingResults.NANOSECONDS_IN_MINUTE;
         try {
             log.info("Processing complete. Results are: {}", this.toJsonString());
         } catch (JsonProcessingException e) {

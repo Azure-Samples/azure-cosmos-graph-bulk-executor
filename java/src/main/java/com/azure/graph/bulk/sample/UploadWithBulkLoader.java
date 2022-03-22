@@ -50,7 +50,7 @@ public class UploadWithBulkLoader {
     }
 
     private void createDatabaseIfNotExists() {
-        log.info("Create database " + DatabaseSettings.DATABASE_NAME + " if not exists.");
+        log.info("Create database {} if not exists.", DatabaseSettings.DATABASE_NAME);
 
         //  Create database if not exists
         //  <CreateDatabaseIfNotExists>
@@ -58,22 +58,24 @@ public class UploadWithBulkLoader {
                 client.createDatabaseIfNotExists(DatabaseSettings.DATABASE_NAME);
         databaseIfNotExists.flatMap(databaseResponse -> {
             database = client.getDatabase(databaseResponse.getProperties().getId());
-            log.info("Checking database " + database.getId() + " completed!\n");
+            log.info("Checking database {} completed!\n", database.getId());
             return Mono.empty();
         }).block();
         //  </CreateDatabaseIfNotExists>
     }
 
     private void createContainerIfNotExists() {
-        log.info("Create container " + DatabaseSettings.CONTAINER_NAME + " if not exists.");
+        log.info("Create container {} if not exists.", DatabaseSettings.CONTAINER_NAME);
 
         //  Create container if not exists
         //  <CreateContainerIfNotExists>
 
         CosmosContainerProperties containerProperties = new CosmosContainerProperties(
                 DatabaseSettings.CONTAINER_NAME, DatabaseSettings.PARTITION_KEY_PATH);
-        ThroughputProperties throughputProperties = ThroughputProperties.createManualThroughput(DatabaseSettings.THROUGHPUT);
-        Mono<CosmosContainerResponse> containerIfNotExists = database.createContainerIfNotExists(containerProperties, throughputProperties);
+        ThroughputProperties throughputProperties = ThroughputProperties.createManualThroughput(
+                DatabaseSettings.THROUGHPUT);
+        Mono<CosmosContainerResponse> containerIfNotExists = database.createContainerIfNotExists(
+                containerProperties, throughputProperties);
 
         //  Create container with the configured RU/s
         CosmosContainerResponse cosmosContainerResponse = containerIfNotExists.block();
@@ -83,19 +85,20 @@ public class UploadWithBulkLoader {
 
         //Modify existing container
         containerProperties = cosmosContainerResponse.getProperties();
-        Mono<CosmosContainerResponse> propertiesReplace = container.replace(containerProperties, new CosmosContainerRequestOptions());
+        Mono<CosmosContainerResponse> propertiesReplace = container.replace(containerProperties,
+                new CosmosContainerRequestOptions());
         propertiesReplace.flatMap(containerResponse -> {
-            log.info("setupContainer(): Container " + container.getId() + " in " + database.getId() +
-                    " has been updated with it's new properties.");
+            log.info("setupContainer(): Container {} in {} has been updated with it's new properties.",
+                    container.getId(), database.getId());
             return Mono.empty();
-        }).onErrorResume((exception) -> {
-            log.error("setupContainer(): Unable to update properties for container " + container.getId() +
-                    " in database " + database.getId() +
-                    ". e: " + exception.getLocalizedMessage());
+        }).onErrorResume(exception -> {
+            log.error("setupContainer(): Unable to update properties for container {} in database {}. e: {}",
+                    container.getId(), database.getId(), exception.getLocalizedMessage());
             return Mono.empty();
         }).block();
     }
 
+    @SuppressWarnings("rawtypes")
     public void uploadDocuments(
             Stream vertices, Stream edges, boolean createDocs) {
 

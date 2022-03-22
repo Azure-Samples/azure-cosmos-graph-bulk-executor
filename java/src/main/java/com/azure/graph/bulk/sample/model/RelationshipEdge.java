@@ -11,9 +11,9 @@ import com.azure.graph.bulk.impl.model.GremlinEdgeVertexInfo;
 
 @GremlinEdge(partitionKeyFieldName = "country")
 public class RelationshipEdge {
-    @GremlinEdgeVertex(Direction = Direction.DESTINATION)
+    @GremlinEdgeVertex(direction = Direction.DESTINATION)
     public GremlinEdgeVertexInfo destinationVertexInfo;
-    @GremlinEdgeVertex(Direction = Direction.SOURCE)
+    @GremlinEdgeVertex(direction = Direction.SOURCE)
     public GremlinEdgeVertexInfo sourceVertexInfo;
     @GremlinLabel
     public String relationshipType;
@@ -35,6 +35,7 @@ public class RelationshipEdge {
 
         if (isNotEqual(destinationVertexInfo, other.destinationVertexInfo)) return false;
         if (isNotEqual(sourceVertexInfo, other.sourceVertexInfo)) return false;
+        //noinspection RedundantIfStatement
         if (isNotEqual(relationshipType, other.relationshipType)) return false;
 
         return true;
