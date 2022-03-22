@@ -27,9 +27,6 @@ The /resources/application.properties file defines the data required to configur
   container isn't found, the sample code will create it.
 * **sample.sql.partition.path**: If the container needs to be created, this value will be used to define the
   partitionKey path.
-* **sample.sql.allow.upserts**: Tells the sample whether it will use the UpsertItemOperations or, if false, the
-  CreateItemOperations. Explore the differences in performance between the two and determine which options best suits
-  your use case.
 * **sample.sql.allow.throughput**: The container will be updated to use the throughput value defined here. If you are
   exploring different throughput options to meet your performance demands, make sure to reset the throughput on the
   container when done with your exploration. There are costs associated with leaving the container provisioned with a
@@ -65,6 +62,8 @@ When running the sample there are several command line arguments that can be pro
   will randomly select a number between 1 and the value provided here.
 * **--domainSample** (-d): Tells the application to run the sample using the Person and Relationship domain structures
   instead of the GraphBulkExecutors GremlinVertex and GremlinEdge POJOs.
+* **--createDocuments** (-c): Tells the application to use create operations. If not present, the application will
+  default to using upsert operations.
 
 ## The Sample Domain
 

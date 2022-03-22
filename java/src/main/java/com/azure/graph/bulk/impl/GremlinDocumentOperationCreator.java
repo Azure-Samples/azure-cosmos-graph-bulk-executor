@@ -26,6 +26,13 @@ public class GremlinDocumentOperationCreator {
         return new GremlinDocumentCreatorBuilder();
     }
 
+    /**
+     * Used to convert the stream of objects provided into a stream of Cosmos Create Operations
+     *
+     * @param vertices Stream of objects that are either GremlinVertex objects, or domain objects with the
+     *                 GremlinVertex annotations
+     * @return Stream of Cosmos Item Operations
+     */
     public Stream<CosmosItemOperation> getVertexCreateOperations(Stream<Object> vertices) {
         return vertices.map(v -> {
             GremlinVertex vertex = (v instanceof GremlinVertex) ?
@@ -36,6 +43,13 @@ public class GremlinDocumentOperationCreator {
         });
     }
 
+    /**
+     * Used to convert the stream of objects provided into a stream of Cosmos Upsert Operations
+     *
+     * @param vertices Stream of objects that are either GremlinVertex objects, or domain objects with the
+     *                 GremlinVertex annotations
+     * @return Stream of Cosmos Item Operations
+     */
     public Stream<CosmosItemOperation> getVertexUpsertOperations(Stream<Object> vertices) {
         return vertices.map(v -> {
             GremlinVertex vertex = (v instanceof GremlinVertex) ?
@@ -46,7 +60,7 @@ public class GremlinDocumentOperationCreator {
         });
     }
 
-    public CosmosItemOperation getVertexCreateOperation(GremlinVertex vertex) {
+    private CosmosItemOperation getVertexCreateOperation(GremlinVertex vertex) {
         PartitionKey partitionKey = new PartitionKey(vertex.getPartitionKey().getValue());
         try {
             return CosmosBulkOperations.getCreateItemOperation(
@@ -68,6 +82,13 @@ public class GremlinDocumentOperationCreator {
         }
     }
 
+    /**
+     * Used to convert the stream of objects provided into a stream of Cosmos Create Operations
+     *
+     * @param edges Stream of objects that are either GremlinEdge objects, or domain objects with the
+     *              GremlinEdge annotations
+     * @return Stream of Cosmos Item Operations
+     */
     public Stream<CosmosItemOperation> getEdgeCreateOperations(Stream<Object> edges) {
         return edges.map(e -> {
             GremlinEdge edge = e instanceof GremlinEdge ? (GremlinEdge) e : ObjectToEdge.toGremlinEdge(e);
@@ -76,6 +97,13 @@ public class GremlinDocumentOperationCreator {
         });
     }
 
+    /**
+     * Used to convert the stream of objects provided into a stream of Cosmos Upsert Operations
+     *
+     * @param edges Stream of objects that are either GremlinEdge objects, or domain objects with the
+     *              GremlinEdge annotations
+     * @return Stream of Cosmos Item Operations
+     */
     public Stream<CosmosItemOperation> getEdgeUpsertOperations(Stream<Object> edges) {
         return edges.map(e -> {
             GremlinEdge edge = e instanceof GremlinEdge ? (GremlinEdge) e : ObjectToEdge.toGremlinEdge(e);
