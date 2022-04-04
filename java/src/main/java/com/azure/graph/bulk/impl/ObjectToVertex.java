@@ -11,6 +11,8 @@ import com.azure.graph.bulk.impl.annotations.GremlinPartitionKey;
 import com.azure.graph.bulk.impl.annotations.GremlinProperty;
 import com.azure.graph.bulk.impl.annotations.GremlinPropertyMap;
 import com.azure.graph.bulk.impl.annotations.GremlinVertex;
+import com.azure.graph.bulk.impl.annotations.VertexAnnotationValidator;
+import com.azure.graph.bulk.impl.model.AnnotationValidationException;
 import com.azure.graph.bulk.impl.model.ObjectConversionException;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
@@ -19,6 +21,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static java.lang.reflect.Modifier.*;
@@ -27,6 +30,8 @@ public final class ObjectToVertex {
     private ObjectToVertex() {
         throw new IllegalStateException("Utility class, should not be constructed");
     }
+
+    private static final VertexAnnotationValidator vertexValidator = new VertexAnnotationValidator();
 
     /**
      * Converts an object defined by a class that has GremlinVertex annotations defined into an
@@ -38,6 +43,11 @@ public final class ObjectToVertex {
     // InvocationTargetException should never be thrown due to not being able to see methods that are not public
     public static com.azure.graph.bulk.impl.model.GremlinVertex toGremlinVertex(Object from) {
         Class<?> clazz = from.getClass();
+
+        List<String> validationResults = vertexValidator.validate(clazz);
+        if (!validationResults.isEmpty()) {
+            throw new AnnotationValidationException(clazz, validationResults);
+        }
 
         com.azure.graph.bulk.impl.model.GremlinVertex results = com.azure.graph.bulk.impl.model.GremlinVertex.builder()
                 .properties(new HashMap<>())

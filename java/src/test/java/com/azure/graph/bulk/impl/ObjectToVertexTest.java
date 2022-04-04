@@ -3,6 +3,10 @@
 
 package com.azure.graph.bulk.impl;
 
+import com.azure.graph.bulk.impl.annotations.GremlinId;
+import com.azure.graph.bulk.impl.annotations.GremlinLabel;
+import com.azure.graph.bulk.impl.annotations.GremlinLabelGetter;
+import com.azure.graph.bulk.impl.model.AnnotationValidationException;
 import com.azure.graph.bulk.impl.model.GremlinPartitionKey;
 import com.azure.graph.bulk.impl.model.GremlinVertex;
 import com.azure.graph.bulk.sample.model.PersonVertex;
@@ -49,5 +53,30 @@ class ObjectToVertexTest {
                 .email("john.doe@test.com")
                 .country("Neverland")
                 .isSpecial(Boolean.FALSE).build();
+    }
+
+    @com.azure.graph.bulk.impl.annotations.GremlinVertex(label = "TheLabel")
+    static class SoManyProblems {
+        @GremlinId
+        public String id;
+        @GremlinId
+        public String id2;
+        @com.azure.graph.bulk.impl.annotations.GremlinPartitionKey
+        public String partitionKey;
+        @com.azure.graph.bulk.impl.annotations.GremlinPartitionKey
+        public String partitionKey2;
+        @GremlinLabel
+        public String label;
+
+        @GremlinLabelGetter
+        public String label() {
+            return "TheLabel";
+        }
+    }
+
+    @Test
+    void SoManyProblemsThrowsException() {
+        SoManyProblems problems = new SoManyProblems();
+        assertThrows(AnnotationValidationException.class, () -> ObjectToVertex.toGremlinVertex(problems));
     }
 }

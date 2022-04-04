@@ -3,6 +3,8 @@
 
 package com.azure.graph.bulk.impl;
 
+import com.azure.graph.bulk.impl.annotations.GremlinId;
+import com.azure.graph.bulk.impl.model.AnnotationValidationException;
 import com.azure.graph.bulk.impl.model.GremlinEdge;
 import com.azure.graph.bulk.impl.model.GremlinEdgeVertexInfo;
 import com.azure.graph.bulk.impl.model.GremlinPartitionKey;
@@ -46,5 +48,21 @@ class ObjectToEdgeTest {
                 .build();
 
         return edge;
+    }
+
+    @com.azure.graph.bulk.impl.annotations.GremlinEdge(partitionKeyFieldName = "pk-field")
+    static class SoManyProblems {
+        @GremlinId
+        public String id;
+        @GremlinId
+        public String id2;
+        @com.azure.graph.bulk.impl.annotations.GremlinPartitionKey
+        public String partitionKey;
+    }
+
+    @Test
+    void SoManyProblemsThrowsException() {
+        SoManyProblems problems = new SoManyProblems();
+        assertThrows(AnnotationValidationException.class, () -> ObjectToEdge.toGremlinEdge(problems));
     }
 }

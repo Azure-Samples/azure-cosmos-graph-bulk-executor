@@ -5,6 +5,7 @@ package com.azure.graph.bulk.impl;
 
 import com.azure.graph.bulk.impl.annotations.*;
 import com.azure.graph.bulk.impl.annotations.GremlinEdgeVertex.Direction;
+import com.azure.graph.bulk.impl.model.AnnotationValidationException;
 import com.azure.graph.bulk.impl.model.GremlinEdgeVertexInfo;
 import com.azure.graph.bulk.impl.model.ObjectConversionException;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -13,6 +14,7 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 
 import static java.lang.reflect.Modifier.*;
@@ -22,6 +24,8 @@ public final class ObjectToEdge {
         throw new IllegalStateException("Utility class, should not be constructed");
     }
 
+    private static final EdgeAnnotationValidator edgeClassValidator = new EdgeAnnotationValidator();
+
     /**
      * Converts an object defined by a class that has GremlinEdge annotations defined into an instance of a GremlinEdge
      *
@@ -30,6 +34,11 @@ public final class ObjectToEdge {
      */
     public static com.azure.graph.bulk.impl.model.GremlinEdge toGremlinEdge(Object from) {
         Class<?> clazz = from.getClass();
+
+        List<String> validationResults = edgeClassValidator.validate(clazz);
+        if (!validationResults.isEmpty()) {
+            throw new AnnotationValidationException(clazz, validationResults);
+        }
 
         com.azure.graph.bulk.impl.model.GremlinEdge converted = new com.azure.graph.bulk.impl.model.GremlinEdge();
 
