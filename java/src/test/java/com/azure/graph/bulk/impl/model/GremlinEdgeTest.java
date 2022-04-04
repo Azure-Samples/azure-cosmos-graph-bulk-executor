@@ -12,8 +12,16 @@ class GremlinEdgeTest {
                 .id("Good")
                 .label("Edge")
                 .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
-                .sourceVertexInfo(new GremlinEdgeVertexInfo("Source"))
-                .destinationVertexInfo(new GremlinEdgeVertexInfo("Destination"))
+                .sourceVertexInfo(GremlinEdgeVertexInfo.builder()
+                        .id("Source")
+                        .label("MyLabel")
+                        .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
+                        .build())
+                .destinationVertexInfo(GremlinEdgeVertexInfo.builder()
+                        .id("Destination")
+                        .label("MyLabel")
+                        .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
+                        .build())
                 .build();
 
         assertDoesNotThrow(edge::validate);
@@ -25,8 +33,16 @@ class GremlinEdgeTest {
                 .id("")
                 .label("Edge")
                 .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
-                .sourceVertexInfo(new GremlinEdgeVertexInfo("Source"))
-                .destinationVertexInfo(new GremlinEdgeVertexInfo("Destination"))
+                .sourceVertexInfo(GremlinEdgeVertexInfo.builder()
+                        .id("Source")
+                        .label("MyLabel")
+                        .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
+                        .build())
+                .destinationVertexInfo(GremlinEdgeVertexInfo.builder()
+                        .id("Destination")
+                        .label("MyLabel")
+                        .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
+                        .build())
                 .build();
 
         assertThrows(IllegalStateException.class, edge::validate);
@@ -37,8 +53,16 @@ class GremlinEdgeTest {
         GremlinEdge edge = GremlinEdge.builder()
                 .label("Edge")
                 .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
-                .sourceVertexInfo(new GremlinEdgeVertexInfo("Source"))
-                .destinationVertexInfo(new GremlinEdgeVertexInfo("Destination"))
+                .sourceVertexInfo(GremlinEdgeVertexInfo.builder()
+                        .id("Source")
+                        .label("MyLabel")
+                        .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
+                        .build())
+                .destinationVertexInfo(GremlinEdgeVertexInfo.builder()
+                        .id("Destination")
+                        .label("MyLabel")
+                        .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
+                        .build())
                 .build();
 
         assertThrows(IllegalStateException.class, edge::validate);
@@ -50,8 +74,16 @@ class GremlinEdgeTest {
                 .id("Bad")
                 .label("")
                 .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
-                .sourceVertexInfo(new GremlinEdgeVertexInfo("Source"))
-                .destinationVertexInfo(new GremlinEdgeVertexInfo("Destination"))
+                .sourceVertexInfo(GremlinEdgeVertexInfo.builder()
+                        .id("Source")
+                        .label("MyLabel")
+                        .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
+                        .build())
+                .destinationVertexInfo(GremlinEdgeVertexInfo.builder()
+                        .id("Destination")
+                        .label("MyLabel")
+                        .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
+                        .build())
                 .build();
 
         assertThrows(IllegalStateException.class, edge::validate);
@@ -62,8 +94,16 @@ class GremlinEdgeTest {
         GremlinEdge edge = GremlinEdge.builder()
                 .id("Bad")
                 .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
-                .sourceVertexInfo(new GremlinEdgeVertexInfo("Source"))
-                .destinationVertexInfo(new GremlinEdgeVertexInfo("Destination"))
+                .sourceVertexInfo(GremlinEdgeVertexInfo.builder()
+                        .id("Source")
+                        .label("MyLabel")
+                        .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
+                        .build())
+                .destinationVertexInfo(GremlinEdgeVertexInfo.builder()
+                        .id("Destination")
+                        .label("MyLabel")
+                        .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
+                        .build())
                 .build();
 
         assertThrows(IllegalStateException.class, edge::validate);
@@ -74,7 +114,11 @@ class GremlinEdgeTest {
         GremlinEdge edge = GremlinEdge.builder()
                 .id("Bad")
                 .label("Edge")
-                .destinationVertexInfo(new GremlinEdgeVertexInfo("Destination"))
+                .destinationVertexInfo(GremlinEdgeVertexInfo.builder()
+                        .id("Destination")
+                        .label("MyLabel")
+                        .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
+                        .build())
                 .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
                 .build();
 
@@ -86,7 +130,11 @@ class GremlinEdgeTest {
         GremlinEdge edge = GremlinEdge.builder()
                 .id("Bad")
                 .label("Edge")
-                .sourceVertexInfo(new GremlinEdgeVertexInfo("Source"))
+                .sourceVertexInfo(GremlinEdgeVertexInfo.builder()
+                        .id("Source")
+                        .label("MyLabel")
+                        .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
+                        .build())
                 .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
                 .build();
 
@@ -98,8 +146,16 @@ class GremlinEdgeTest {
         GremlinEdge edge = GremlinEdge.builder()
                 .id("Bad")
                 .label("Edge")
-                .sourceVertexInfo(new GremlinEdgeVertexInfo("Source"))
-                .destinationVertexInfo(new GremlinEdgeVertexInfo("Destination"))
+                .sourceVertexInfo(GremlinEdgeVertexInfo.builder()
+                        .id("Source")
+                        .label("MyLabel")
+                        .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
+                        .build())
+                .destinationVertexInfo(GremlinEdgeVertexInfo.builder()
+                        .id("Destination")
+                        .label("MyLabel")
+                        .partitionKey(GremlinPartitionKey.builder().fieldName("Field").value("Value").build())
+                        .build())
                 .build();
 
         assertThrows(IllegalStateException.class, edge::validate);

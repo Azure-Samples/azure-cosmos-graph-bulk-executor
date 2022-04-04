@@ -18,9 +18,16 @@ public class GremlinEdge {
 
     public GremlinEdge() {
         id = UUID.randomUUID().toString();
-        destinationVertexInfo = new GremlinEdgeVertexInfo();
-        sourceVertexInfo = new GremlinEdgeVertexInfo();
         properties = Collections.unmodifiableMap(new HashMap<>());
+    }
+
+    public GremlinEdge(GremlinEdgeBuilder builder) {
+        this.id = builder.id;
+        this.label = builder.label;
+        this.destinationVertexInfo = builder.destinationVertexInfo;
+        this.sourceVertexInfo = builder.sourceVertexInfo;
+        this.partitionKey = builder.partitionKey;
+        this.properties = builder.properties;
     }
 
     public String getId() {
@@ -84,28 +91,23 @@ public class GremlinEdge {
         if (this.sourceVertexInfo == null) throw new IllegalStateException(
                 String.format("Missing source vertex information on GremlinEdge: %s", id));
 
+        this.sourceVertexInfo.validate();
+
         if (this.destinationVertexInfo == null) throw new IllegalStateException(
                 String.format("Missing destination vertex information on GremlinEdge: %s", id));
+
+        this.destinationVertexInfo.validate();
 
         if (partitionKey == null) throw new IllegalStateException(
                 String.format("Missing Partition Key on GremlinEdge ID: %s, Source ID: %s, Destination ID: %s",
                         this.id, this.sourceVertexInfo.getId(), this.getDestinationVertexInfo().getId()));
-        partitionKey.validate();
+
     }
 
     public static GremlinEdge.GremlinEdgeBuilder builder() {
         return new GremlinEdge.GremlinEdgeBuilder();
     }
-
-    public GremlinEdge(GremlinEdgeBuilder builder) {
-        this.id = builder.id;
-        this.label = builder.label;
-        this.destinationVertexInfo = builder.destinationVertexInfo;
-        this.sourceVertexInfo = builder.sourceVertexInfo;
-        this.partitionKey = builder.partitionKey;
-        this.properties = builder.properties;
-    }
-
+    
     public boolean equals(Object o) {
         if (o == this)
             return true;
@@ -150,6 +152,7 @@ public class GremlinEdge {
         private Map<String, Object> properties;
 
         GremlinEdgeBuilder() {
+            properties = Collections.unmodifiableMap(new HashMap<>());
         }
 
         public GremlinEdge.GremlinEdgeBuilder id(String id) {
