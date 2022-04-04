@@ -1,18 +1,27 @@
 package com.azure.graph.bulk.impl.annotations;
 
 import com.azure.graph.bulk.sample.model.PersonVertex;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestInstance(Lifecycle.PER_CLASS)
 class VertexAnnotationValidatorTest {
+    VertexAnnotationValidator validator;
+
+    @BeforeAll
+    void setup() {
+        validator = new VertexAnnotationValidator();
+    }
+
     @Test
     void ClassLevelLabelPassesValidation() {
-        VertexAnnotationValidator validator = new VertexAnnotationValidator();
-
-        List<String> results = validator.validateVertexClass(PersonVertex.class);
+        List<String> results = validator.validate(PersonVertex.class);
 
         assertEquals(0, results.size());
     }
@@ -27,9 +36,7 @@ class VertexAnnotationValidatorTest {
 
     @Test
     void MissingLabelFailsValidation() {
-        VertexAnnotationValidator validator = new VertexAnnotationValidator();
-
-        List<String> results = validator.validateVertexClass(MissingLabel.class);
+        List<String> results = validator.validate(MissingLabel.class);
 
         assertEquals(1, results.size());
         assertEquals(VertexAnnotationValidator.GREMLIN_LABEL_INVALID, results.get(0));
@@ -47,9 +54,7 @@ class VertexAnnotationValidatorTest {
 
     @Test
     void FieldLevelLabelPassesValidation() {
-        VertexAnnotationValidator validator = new VertexAnnotationValidator();
-
-        List<String> results = validator.validateVertexClass(FieldLevelLabel.class);
+        List<String> results = validator.validate(FieldLevelLabel.class);
 
         assertEquals(0, results.size());
     }
@@ -69,9 +74,7 @@ class VertexAnnotationValidatorTest {
 
     @Test
     void MethodLevelLabelPassesValidation() {
-        VertexAnnotationValidator validator = new VertexAnnotationValidator();
-
-        List<String> results = validator.validateVertexClass(MethodLevelLabel.class);
+        List<String> results = validator.validate(MethodLevelLabel.class);
 
         assertEquals(0, results.size());
     }
@@ -93,9 +96,7 @@ class VertexAnnotationValidatorTest {
 
     @Test
     void MethodAndFieldLabelFailsValidation() {
-        VertexAnnotationValidator validator = new VertexAnnotationValidator();
-
-        List<String> results = validator.validateVertexClass(MethodAndFieldLevelLabel.class);
+        List<String> results = validator.validate(MethodAndFieldLevelLabel.class);
 
         assertEquals(1, results.size());
         assertEquals(VertexAnnotationValidator.GREMLIN_LABEL_INVALID, results.get(0));
@@ -113,9 +114,7 @@ class VertexAnnotationValidatorTest {
 
     @Test
     void ClassAndFieldLabelFailsValidation() {
-        VertexAnnotationValidator validator = new VertexAnnotationValidator();
-
-        List<String> results = validator.validateVertexClass(ClassAndFieldLevelLabel.class);
+        List<String> results = validator.validate(ClassAndFieldLevelLabel.class);
 
         assertEquals(1, results.size());
         assertEquals(VertexAnnotationValidator.GREMLIN_LABEL_INVALID_WITH_CLASS_ANNOTATION, results.get(0));
@@ -138,9 +137,7 @@ class VertexAnnotationValidatorTest {
 
     @Test
     void AllTheLevelsLabelFailsValidation() {
-        VertexAnnotationValidator validator = new VertexAnnotationValidator();
-
-        List<String> results = validator.validateVertexClass(AllTheLevelsLabel.class);
+        List<String> results = validator.validate(AllTheLevelsLabel.class);
 
         assertEquals(1, results.size());
         assertEquals(VertexAnnotationValidator.GREMLIN_LABEL_INVALID_WITH_CLASS_ANNOTATION, results.get(0));
@@ -154,9 +151,7 @@ class VertexAnnotationValidatorTest {
 
     @Test
     void NoPartitionKeyFailsValidation() {
-        VertexAnnotationValidator validator = new VertexAnnotationValidator();
-
-        List<String> results = validator.validateVertexClass(NoPartitionKey.class);
+        List<String> results = validator.validate(NoPartitionKey.class);
 
         assertEquals(1, results.size());
         assertEquals(VertexAnnotationValidator.GREMLIN_PARTITION_KEY_INVALID, results.get(0));
@@ -174,9 +169,7 @@ class VertexAnnotationValidatorTest {
 
     @Test
     void TooManyPartitionKeysFailsValidation() {
-        VertexAnnotationValidator validator = new VertexAnnotationValidator();
-
-        List<String> results = validator.validateVertexClass(TooManyPartitionKeys.class);
+        List<String> results = validator.validate(TooManyPartitionKeys.class);
 
         assertEquals(1, results.size());
         assertEquals(VertexAnnotationValidator.GREMLIN_PARTITION_KEY_INVALID, results.get(0));
@@ -190,9 +183,7 @@ class VertexAnnotationValidatorTest {
 
     @Test
     void NoIdFailsValidation() {
-        VertexAnnotationValidator validator = new VertexAnnotationValidator();
-
-        List<String> results = validator.validateVertexClass(NoId.class);
+        List<String> results = validator.validate(NoId.class);
 
         assertEquals(1, results.size());
         assertEquals(VertexAnnotationValidator.GREMLIN_ID_INVALID, results.get(0));
@@ -210,9 +201,7 @@ class VertexAnnotationValidatorTest {
 
     @Test
     void TooManyIdsFailsValidation() {
-        VertexAnnotationValidator validator = new VertexAnnotationValidator();
-
-        List<String> results = validator.validateVertexClass(TooManyIds.class);
+        List<String> results = validator.validate(TooManyIds.class);
 
         assertEquals(1, results.size());
         assertEquals(VertexAnnotationValidator.GREMLIN_ID_INVALID, results.get(0));

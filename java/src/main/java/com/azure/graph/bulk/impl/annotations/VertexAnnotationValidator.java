@@ -23,7 +23,7 @@ public class VertexAnnotationValidator {
     private final Map<String, List<String>> validatedClasses = new HashMap<>();
 
 
-    public List<String> validateVertexClass(Class<?> clazz) {
+    public List<String> validate(Class<?> clazz) {
         if (validatedClasses.containsKey(clazz.getName()))
             return validatedClasses.get(clazz.getName());
 
