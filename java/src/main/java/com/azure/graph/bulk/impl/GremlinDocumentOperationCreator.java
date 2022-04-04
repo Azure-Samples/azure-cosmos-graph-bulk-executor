@@ -34,13 +34,7 @@ public class GremlinDocumentOperationCreator {
      * @return Stream of Cosmos Item Operations
      */
     public Stream<CosmosItemOperation> getVertexCreateOperations(Stream<Object> vertices) {
-        return vertices.map(v -> {
-            GremlinVertex vertex = (v instanceof GremlinVertex) ?
-                    (GremlinVertex) v :
-                    ObjectToVertex.toGremlinVertex(v);
-            vertex.validate();
-            return getVertexCreateOperation(vertex);
-        });
+        return vertices.map(this::getVertexCreateOperation);
     }
 
     /**
@@ -51,35 +45,54 @@ public class GremlinDocumentOperationCreator {
      * @return Stream of Cosmos Item Operations
      */
     public Stream<CosmosItemOperation> getVertexUpsertOperations(Stream<Object> vertices) {
-        return vertices.map(v -> {
-            GremlinVertex vertex = (v instanceof GremlinVertex) ?
-                    (GremlinVertex) v :
-                    ObjectToVertex.toGremlinVertex(v);
-            vertex.validate();
-            return getVertexUpsertOperation(vertex);
-        });
+        return vertices.map(this::getVertexUpsertOperation);
     }
 
-    private CosmosItemOperation getVertexCreateOperation(GremlinVertex vertex) {
-        PartitionKey partitionKey = new PartitionKey(vertex.getPartitionKey().getValue());
+    /***
+     * Converts the object provided into a Cosmos Create Operation
+     *
+     * @param vertex Either a GremlinVertex object or domain object with the GremlinVertex annotations
+     * @return CosmosItemOperation to create the object with
+     */
+    public CosmosItemOperation getVertexCreateOperation(Object vertex) {
+        GremlinVertex gremlinVertex = getVertexFromObject(vertex);
+
+        PartitionKey partitionKey = new PartitionKey(gremlinVertex.getPartitionKey().getValue());
         try {
             return CosmosBulkOperations.getCreateItemOperation(
-                    new JsonSerializable(mapper.writeValueAsString(vertex)),
+                    new JsonSerializable(mapper.writeValueAsString(gremlinVertex)),
                     partitionKey);
         } catch (JsonProcessingException e) {
             throw new DocumentSerializationException(e);
         }
     }
 
-    private CosmosItemOperation getVertexUpsertOperation(GremlinVertex vertex) {
-        PartitionKey partitionKey = new PartitionKey(vertex.getPartitionKey().getValue());
+    /***
+     * Converts the object provided into a Cosmos Upsert Operation
+     *
+     * @param vertex Either a GremlinVertex object or domain object with the GremlinVertex annotations
+     * @return CosmosItemOperation to upsert the object with
+     */
+    public CosmosItemOperation getVertexUpsertOperation(Object vertex) {
+        GremlinVertex gremlinVertex = getVertexFromObject(vertex);
+
+        PartitionKey partitionKey = new PartitionKey(gremlinVertex.getPartitionKey().getValue());
         try {
             return CosmosBulkOperations.getUpsertItemOperation(
-                    new JsonSerializable(mapper.writeValueAsString(vertex)),
+                    new JsonSerializable(mapper.writeValueAsString(gremlinVertex)),
                     partitionKey);
         } catch (JsonProcessingException e) {
             throw new DocumentSerializationException(e);
         }
+    }
+
+    private GremlinVertex getVertexFromObject(Object rawVertex) {
+        GremlinVertex vertex = (rawVertex instanceof GremlinVertex) ?
+                (GremlinVertex) rawVertex :
+                ObjectToVertex.toGremlinVertex(rawVertex);
+
+        vertex.validate();
+        return vertex;
     }
 
     /**
@@ -90,11 +103,7 @@ public class GremlinDocumentOperationCreator {
      * @return Stream of Cosmos Item Operations
      */
     public Stream<CosmosItemOperation> getEdgeCreateOperations(Stream<Object> edges) {
-        return edges.map(e -> {
-            GremlinEdge edge = e instanceof GremlinEdge ? (GremlinEdge) e : ObjectToEdge.toGremlinEdge(e);
-            edge.validate();
-            return getEdgeCreateOperation(edge);
-        });
+        return edges.map(this::getEdgeCreateOperation);
     }
 
     /**
@@ -105,29 +114,47 @@ public class GremlinDocumentOperationCreator {
      * @return Stream of Cosmos Item Operations
      */
     public Stream<CosmosItemOperation> getEdgeUpsertOperations(Stream<Object> edges) {
-        return edges.map(e -> {
-            GremlinEdge edge = e instanceof GremlinEdge ? (GremlinEdge) e : ObjectToEdge.toGremlinEdge(e);
-            edge.validate();
-            return getEdgeUpsertOperation(edge);
-        });
+        return edges.map(this::getEdgeUpsertOperation);
     }
 
-    private CosmosItemOperation getEdgeCreateOperation(GremlinEdge edge) {
-        PartitionKey partitionKey = new PartitionKey(edge.getPartitionKey().getValue());
+    /***
+     * Converts the object provided into a Cosmos Create Operation
+     *
+     * @param edge Either a GremlinVertex object or domain object with the GremlinVertex annotations
+     * @return CosmosItemOperation to create the object with
+     */
+    public CosmosItemOperation getEdgeCreateOperation(Object edge) {
+        GremlinEdge gremlinEdge = getEdgeFromObject(edge);
+
+        PartitionKey partitionKey = new PartitionKey(gremlinEdge.getPartitionKey().getValue());
         try {
             return CosmosBulkOperations.getCreateItemOperation(
-                    new JsonSerializable(mapper.writeValueAsString(edge)),
+                    new JsonSerializable(mapper.writeValueAsString(gremlinEdge)),
                     partitionKey);
         } catch (JsonProcessingException e) {
             throw new DocumentSerializationException(e);
         }
     }
 
-    private CosmosItemOperation getEdgeUpsertOperation(GremlinEdge edge) {
-        PartitionKey partitionKey = new PartitionKey(edge.getPartitionKey().getValue());
+    private GremlinEdge getEdgeFromObject(Object e) {
+        GremlinEdge edge = e instanceof GremlinEdge ? (GremlinEdge) e : ObjectToEdge.toGremlinEdge(e);
+        edge.validate();
+        return edge;
+    }
+
+    /***
+     * Converts the object provided into a Cosmos Upsert Operation
+     *
+     * @param edge Either a GremlinVertex object or domain object with the GremlinVertex annotations
+     * @return CosmosItemOperation to upsert the object with
+     */
+    public CosmosItemOperation getEdgeUpsertOperation(Object edge) {
+        GremlinEdge gremlinEdge = getEdgeFromObject(edge);
+
+        PartitionKey partitionKey = new PartitionKey(gremlinEdge.getPartitionKey().getValue());
         try {
             return CosmosBulkOperations.getUpsertItemOperation(
-                    new JsonSerializable(mapper.writeValueAsString(edge)),
+                    new JsonSerializable(mapper.writeValueAsString(gremlinEdge)),
                     partitionKey);
         } catch (JsonProcessingException e) {
             throw new DocumentSerializationException(e);
