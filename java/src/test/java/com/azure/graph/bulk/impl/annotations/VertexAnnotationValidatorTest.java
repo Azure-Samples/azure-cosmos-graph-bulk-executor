@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class VertexAnnotationValidatorTest {
     @Test
     void ClassLevelLabelPassesValidation() {
-        AnnotationValidator validator = new AnnotationValidator();
+        VertexAnnotationValidator validator = new VertexAnnotationValidator();
 
         List<String> results = validator.validateVertexClass(PersonVertex.class);
 
@@ -27,11 +27,12 @@ class VertexAnnotationValidatorTest {
 
     @Test
     void MissingLabelFailsValidation() {
-        AnnotationValidator validator = new AnnotationValidator();
+        VertexAnnotationValidator validator = new VertexAnnotationValidator();
 
         List<String> results = validator.validateVertexClass(MissingLabel.class);
 
-        assertEquals(AnnotationValidator.GREMLIN_LABEL_INVALID, results.get(0));
+        assertEquals(1, results.size());
+        assertEquals(VertexAnnotationValidator.GREMLIN_LABEL_INVALID, results.get(0));
     }
 
     @GremlinVertex
@@ -46,7 +47,7 @@ class VertexAnnotationValidatorTest {
 
     @Test
     void FieldLevelLabelPassesValidation() {
-        AnnotationValidator validator = new AnnotationValidator();
+        VertexAnnotationValidator validator = new VertexAnnotationValidator();
 
         List<String> results = validator.validateVertexClass(FieldLevelLabel.class);
 
@@ -68,7 +69,7 @@ class VertexAnnotationValidatorTest {
 
     @Test
     void MethodLevelLabelPassesValidation() {
-        AnnotationValidator validator = new AnnotationValidator();
+        VertexAnnotationValidator validator = new VertexAnnotationValidator();
 
         List<String> results = validator.validateVertexClass(MethodLevelLabel.class);
 
@@ -92,11 +93,12 @@ class VertexAnnotationValidatorTest {
 
     @Test
     void MethodAndFieldLabelFailsValidation() {
-        AnnotationValidator validator = new AnnotationValidator();
+        VertexAnnotationValidator validator = new VertexAnnotationValidator();
 
-        List<String> passed = validator.validateVertexClass(MethodAndFieldLevelLabel.class);
+        List<String> results = validator.validateVertexClass(MethodAndFieldLevelLabel.class);
 
-        assertEquals(AnnotationValidator.GREMLIN_LABEL_INVALID, passed.get(0));
+        assertEquals(1, results.size());
+        assertEquals(VertexAnnotationValidator.GREMLIN_LABEL_INVALID, results.get(0));
     }
 
     @GremlinVertex(label = "TheLabel")
@@ -111,11 +113,12 @@ class VertexAnnotationValidatorTest {
 
     @Test
     void ClassAndFieldLabelFailsValidation() {
-        AnnotationValidator validator = new AnnotationValidator();
+        VertexAnnotationValidator validator = new VertexAnnotationValidator();
 
         List<String> results = validator.validateVertexClass(ClassAndFieldLevelLabel.class);
 
-        assertEquals(AnnotationValidator.GREMLIN_LABEL_INVALID_WITH_CLASS_ANNOTATION, results.get(0));
+        assertEquals(1, results.size());
+        assertEquals(VertexAnnotationValidator.GREMLIN_LABEL_INVALID_WITH_CLASS_ANNOTATION, results.get(0));
     }
 
     @GremlinVertex(label = "TheLabel")
@@ -135,11 +138,12 @@ class VertexAnnotationValidatorTest {
 
     @Test
     void AllTheLevelsLabelFailsValidation() {
-        AnnotationValidator validator = new AnnotationValidator();
+        VertexAnnotationValidator validator = new VertexAnnotationValidator();
 
         List<String> results = validator.validateVertexClass(AllTheLevelsLabel.class);
 
-        assertEquals(AnnotationValidator.GREMLIN_LABEL_INVALID_WITH_CLASS_ANNOTATION, results.get(0));
+        assertEquals(1, results.size());
+        assertEquals(VertexAnnotationValidator.GREMLIN_LABEL_INVALID_WITH_CLASS_ANNOTATION, results.get(0));
     }
 
     @GremlinVertex(label = "TheLabel")
@@ -150,11 +154,12 @@ class VertexAnnotationValidatorTest {
 
     @Test
     void NoPartitionKeyFailsValidation() {
-        AnnotationValidator validator = new AnnotationValidator();
+        VertexAnnotationValidator validator = new VertexAnnotationValidator();
 
         List<String> results = validator.validateVertexClass(NoPartitionKey.class);
 
-        assertEquals(AnnotationValidator.GREMLIN_PARTITION_KEY_INVALID, results.get(0));
+        assertEquals(1, results.size());
+        assertEquals(VertexAnnotationValidator.GREMLIN_PARTITION_KEY_INVALID, results.get(0));
     }
 
     @GremlinVertex(label = "TheLabel")
@@ -169,11 +174,12 @@ class VertexAnnotationValidatorTest {
 
     @Test
     void TooManyPartitionKeysFailsValidation() {
-        AnnotationValidator validator = new AnnotationValidator();
+        VertexAnnotationValidator validator = new VertexAnnotationValidator();
 
         List<String> results = validator.validateVertexClass(TooManyPartitionKeys.class);
 
-        assertEquals(AnnotationValidator.GREMLIN_PARTITION_KEY_INVALID, results.get(0));
+        assertEquals(1, results.size());
+        assertEquals(VertexAnnotationValidator.GREMLIN_PARTITION_KEY_INVALID, results.get(0));
     }
 
     @GremlinVertex(label = "TheLabel")
@@ -184,11 +190,12 @@ class VertexAnnotationValidatorTest {
 
     @Test
     void NoIdFailsValidation() {
-        AnnotationValidator validator = new AnnotationValidator();
+        VertexAnnotationValidator validator = new VertexAnnotationValidator();
 
         List<String> results = validator.validateVertexClass(NoId.class);
 
-        assertEquals(AnnotationValidator.GREMLIN_ID_INVALID, results.get(0));
+        assertEquals(1, results.size());
+        assertEquals(VertexAnnotationValidator.GREMLIN_ID_INVALID, results.get(0));
     }
 
     @GremlinVertex(label = "TheLabel")
@@ -203,10 +210,11 @@ class VertexAnnotationValidatorTest {
 
     @Test
     void TooManyIdsFailsValidation() {
-        AnnotationValidator validator = new AnnotationValidator();
+        VertexAnnotationValidator validator = new VertexAnnotationValidator();
 
         List<String> results = validator.validateVertexClass(TooManyIds.class);
 
-        assertEquals(AnnotationValidator.GREMLIN_ID_INVALID, results.get(0));
+        assertEquals(1, results.size());
+        assertEquals(VertexAnnotationValidator.GREMLIN_ID_INVALID, results.get(0));
     }
 }

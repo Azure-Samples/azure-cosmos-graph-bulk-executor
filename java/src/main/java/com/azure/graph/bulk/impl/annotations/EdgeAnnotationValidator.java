@@ -9,28 +9,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public class AnnotationValidator {
-    public static final String GREMLIN_PARTITION_KEY_INVALID =
-            "GremlinPartitionKey annotation is required to be present on only one field.";
-    public static final String GREMLIN_ID_INVALID =
-            "GremlinId annotation is required to be present on only one field.";
+public class EdgeAnnotationValidator {
     public static final String GREMLIN_LABEL_INVALID_WITH_CLASS_ANNOTATION = "GremlinLabel and GremlinLabelGetter " +
-            "annotations can only be used when GremlinVertex class annotation hasn't set a label value.";
+            "annotations can only be used when GremlinEdge class annotation hasn't set a label value.";
     public static final String GREMLIN_LABEL_INVALID = "GremlinLabel and GremlinLabelGetter required to be present " +
-            "on only one field or method when there is no label set on the GremlinVertex class annotation.";
-    
-    private Map<String, List<String>> validatedVertexClasses = new HashMap<>();
-    private Map<String, List<String>> validatedEdgeClasses = new HashMap<>();
+            "on only one field or method when there is no label set on the GremlinEdge class annotation.";
+    public static final String GREMLIN_EDGES_MISSING = "GremlinEdgeVertex annotation is required on two fields.";
 
+    private final Map<String, List<String>> validatedClasses = new HashMap<>();
 
-    public List<String> validateVertexClass(Class<?> clazz) {
-        if (validatedVertexClasses.containsKey(clazz.getName()))
-            return validatedVertexClasses.get(clazz.getName());
+    public List<String> validateEdgeClass(Class<?> clazz) {
+        if (validatedClasses.containsKey(clazz.getName()))
+            return validatedClasses.get(clazz.getName());
 
         List<String> results = new ArrayList<>();
 
         Stream<Class<? extends Annotation>> fieldAnnotations =
-                Stream.of(GremlinId.class, GremlinPartitionKey.class, GremlinLabel.class);
+                Stream.of(GremlinLabel.class, GremlinEdgeVertex.class);
         Map<Class<? extends Annotation>, Integer> fieldAnnotationCounts = getFieldAnnotationCounts(clazz,
                 fieldAnnotations);
 
@@ -39,24 +34,35 @@ public class AnnotationValidator {
         Map<Class<? extends Annotation>, Integer> methodAnnotationCounts = getMethodAnnotationCounts(clazz,
                 methodAnnotations);
 
-        if (fieldAnnotationCounts.get(GremlinPartitionKey.class) != 1)
-            results.add(GREMLIN_PARTITION_KEY_INVALID);
+        validateLabel(clazz, results, fieldAnnotationCounts, methodAnnotationCounts);
+        validateEdges(results, fieldAnnotationCounts);
 
-        if (fieldAnnotationCounts.get(GremlinId.class) != 1)
-            results.add(GREMLIN_ID_INVALID);
+        validatedClasses.put(clazz.getName(), results);
+
+        return results;
+    }
+
+    private void validateLabel(
+            Class<?> clazz,
+            List<String> results,
+            Map<Class<? extends Annotation>, Integer> fieldAnnotationCounts,
+            Map<Class<? extends Annotation>, Integer> methodAnnotationCounts) {
 
         int labelAnnotationCount = fieldAnnotationCounts.get(GremlinLabel.class) +
                 methodAnnotationCounts.get(GremlinLabelGetter.class);
 
-        if (labelAnnotationCount > 0 && !clazz.getAnnotation(GremlinVertex.class).label().isBlank())
+        GremlinEdge classAnnotation = clazz.getAnnotation(GremlinEdge.class);
+
+        if (labelAnnotationCount > 0 && !classAnnotation.label().isBlank())
             results.add(GREMLIN_LABEL_INVALID_WITH_CLASS_ANNOTATION);
 
-        if (labelAnnotationCount != 1 && clazz.getAnnotation(GremlinVertex.class).label().isBlank())
+        if (labelAnnotationCount != 1 && classAnnotation.label().isBlank())
             results.add(GREMLIN_LABEL_INVALID);
+    }
 
-        validatedVertexClasses.put(clazz.getName(), results);
-
-        return results;
+    private void validateEdges(List<String> results, Map<Class<? extends Annotation>, Integer> fieldAnnotationCounts) {
+        if (fieldAnnotationCounts.get(GremlinEdgeVertex.class) != 2)
+            results.add(GREMLIN_EDGES_MISSING);
     }
 
     private Map<Class<? extends Annotation>, Integer> getFieldAnnotationCounts(

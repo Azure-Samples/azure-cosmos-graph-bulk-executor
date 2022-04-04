@@ -47,7 +47,6 @@ public class RelationshipEdge {
         return !source.equals(other);
     }
 
-
     public int hashCode() {
         int result = 59 + (destinationVertexInfo == null ? 43 : destinationVertexInfo.hashCode());
         result = result * 59 + (sourceVertexInfo == null ? 43 : sourceVertexInfo.hashCode());
