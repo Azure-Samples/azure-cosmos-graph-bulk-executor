@@ -3,6 +3,8 @@
 
 package com.azure.graph.bulk.impl.model;
 
+import com.azure.cosmos.implementation.Undefined;
+
 public class GremlinPartitionKey {
     private final String fieldName;
     private Object value;
@@ -39,6 +41,7 @@ public class GremlinPartitionKey {
         if (value instanceof Byte) return true;
         //noinspection RedundantIfStatement
         if (value instanceof Long) return true;
+        if (value == Undefined.value()) return true;
 
         return false;
     }
