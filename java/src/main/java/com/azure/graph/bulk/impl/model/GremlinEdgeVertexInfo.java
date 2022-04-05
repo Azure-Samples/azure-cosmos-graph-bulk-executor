@@ -7,6 +7,7 @@ import com.azure.graph.bulk.impl.annotations.GremlinId;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 
 public class GremlinEdgeVertexInfo {
     private String id;
@@ -114,10 +115,7 @@ public class GremlinEdgeVertexInfo {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        return result;
+        return Objects.hash(id, label, partitionKey);
     }
 
     public static GremlinEdgeVertexInfo.GremlinEdgeVertexInfoBuilder builder() {
