@@ -1,0 +1,11 @@
+{
+    "_isEdge": true,
+    "id": "ebde7c8c-1abc-40e7-bbf0-6714bc229b00",
+    "label": "spouse",
+    "country": "CHN",
+    "_sinkPartition": "CZE",
+    "_sink": "7fe0ddb2-0982-4f9a-b96c-d6d6cf9fbe4e",
+    "_sinkLabel": "PERSON",
+    "_vertexId": "e90d5416-64a2-4846-9c9e-6de61b43ce8d",
+    "_vertexLabel": "PERSON"
+}
