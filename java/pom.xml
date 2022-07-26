@@ -11,7 +11,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <cosmosSDKVersion>LATEST</cosmosSDKVersion>
+        <cosmosSDKVersion>4.29.1</cosmosSDKVersion>
         <commonsVersion>3.12.0</commonsVersion>
         <snapshotDependencyAllowed>true</snapshotDependencyAllowed>
         <skipIntegrationTests>true</skipIntegrationTests>
